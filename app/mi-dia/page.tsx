@@ -8,6 +8,7 @@ import { resumenDia, nivelDe, hoyLocal, correrDias, etiquetaFecha } from '@/lib/
 import { ListaMisiones } from '@/components/ListaMisiones';
 import { NavInferior } from '@/components/NavInferior';
 import { NumeroQueCuenta } from '@/components/NumeroQueCuenta';
+import { ProgresoDia } from '@/components/ProgresoDia';
 import { BarraProgreso } from '@/components/BarraProgreso';
 import { Celebracion } from '@/components/Celebracion';
 import { Nube } from '@/components/Nube';
@@ -93,12 +94,12 @@ export default async function MiDia({
                 </Link>
               )}
             </div>
-            <h1 className="t-seccion truncate text-tinta">
+            <h1 className="t-pagina truncate text-tinta">
               {esHoy ? `¡Hola, ${usuaria.nombre}!` : dia.etiquetaFecha}
             </h1>
           </div>
 
-          <span className="t-label flex flex-none items-center gap-1.5 rounded-[var(--radius-chip)]
+          <span className="t-label flex flex-none items-center gap-2 rounded-[var(--radius-chip)]
                            bg-durazno-100 px-3 py-2 font-extrabold text-durazno-700">
             <Star size={15} fill="#D18E2E" className="text-durazno-700" />
             Nivel {nivel.numero}
@@ -109,7 +110,7 @@ export default async function MiDia({
         <section
           className="relative mb-4 overflow-hidden rounded-[var(--radius-card)] p-5 shadow-n2"
           style={{
-            background: 'linear-gradient(150deg,#A98BE0 0%,#C99AD4 52%,#F2A9C4 100%)',
+            background: 'linear-gradient(150deg,#A98BE0 0%,#C99AD4 52%,#E890B7 100%)',
           }}
           aria-label="Mi progreso de hoy"
         >
@@ -120,19 +121,7 @@ export default async function MiDia({
             MI PROGRESO DE HOY
           </p>
 
-          <p className="t-heroe tabular relative mt-1 text-white">
-            <NumeroQueCuenta valor={dia.hechas} />
-            <span className="t-pagina opacity-90"> de </span>
-            {dia.total}
-          </p>
-
-          <p className="t-cuerpo-fuerte relative mt-2 text-white">
-            {dia.total === 0
-              ? 'Hoy no tengo misiones. A descansar.'
-              : faltan === 0
-                ? '¡Terminé todo mi día! Qué bien me quedó.'
-                : `Me ${faltan === 1 ? 'falta 1 misión' : `faltan ${faltan} misiones`} para el día completo`}
-          </p>
+          <ProgresoDia hechas={dia.hechas} total={dia.total} />
 
           <BarraProgreso
             porcentaje={porcentaje}
@@ -144,13 +133,13 @@ export default async function MiDia({
         {dia.momentos.length > 0 && (
           <Link
             href="/mi-mundo"
-            className="mb-5 block overflow-hidden rounded-[var(--radius-card)] p-3.5 shadow-n2
+            className="mb-5 block overflow-hidden rounded-[var(--radius-card)] p-4 shadow-n2
                        transition-transform duration-150 active:scale-[0.985]"
             style={{
               background: 'linear-gradient(168deg,#DCEEFB 0%,#EBE1FA 48%,#FCE7DB 100%)',
             }}
           >
-            <div className="mb-3 flex items-center justify-between gap-2.5">
+            <div className="mb-3 flex items-center justify-between gap-3">
               <div className="min-w-0">
                 <p className="t-seccion text-tinta">Mi mundo</p>
                 <p className="t-label mt-0.5 truncate text-lav-700">
@@ -233,7 +222,7 @@ export default async function MiDia({
         {/* ── Racha ── */}
         <section className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
-            <p className="t-label-alto flex items-center gap-1.5 text-durazno-700">
+            <p className="t-label-alto flex items-center gap-2 text-durazno-700">
               <Flame size={15} fill="#D18E2E" className="text-durazno-700" />
               MI RACHA
             </p>
@@ -242,7 +231,7 @@ export default async function MiDia({
             >
               <NumeroQueCuenta valor={dia.racha} />
             </p>
-            <p className="t-label mt-1.5 text-durazno-700/85">
+            <p className="t-label mt-2 text-durazno-700/85">
               {dia.racha === 1 ? 'día seguido' : 'días seguidos'}
             </p>
           </div>
@@ -254,7 +243,7 @@ export default async function MiDia({
             >
               {nivel.titulo}
             </p>
-            <p className="t-label mt-1.5 text-menta-700/85">
+            <p className="t-label mt-2 text-menta-700/85">
               {nivel.hechasTotales} misiones cumplidas
             </p>
           </div>

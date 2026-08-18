@@ -19,7 +19,7 @@ export function NavInferior() {
       className="flex-none border-t border-lav-100 bg-superficie pb-[env(safe-area-inset-bottom)]"
       aria-label="Secciones"
     >
-      <ul className="flex items-center justify-around px-1.5 pt-2 pb-2">
+      <ul className="flex items-center justify-around px-2 pt-2 pb-2">
         {DESTINOS.map(({ href, etiqueta, Icono }) => {
           const activo = ruta === href;
           return (

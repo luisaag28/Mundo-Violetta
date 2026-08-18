@@ -21,7 +21,7 @@ function Vasos({
 }) {
   return (
     <span className="mt-1 flex items-center gap-2">
-      <span className="flex gap-1.5">
+      <span className="flex gap-2">
         {Array.from({ length: meta }).map((_, i) => (
           <span
             key={i}
@@ -139,7 +139,7 @@ export function ListaMisiones({
                 aria-pressed={m.completado}
                 aria-busy={enVuelo === m.id}
                 aria-disabled={soloLectura || enVuelo === m.id}
-                className={`flex w-full items-center gap-3 rounded-[var(--radius-card)] p-2.5 pr-4
+                className={`flex w-full items-center gap-3 rounded-[var(--radius-card)] p-3 pr-4
                             text-left transition-colors duration-300 min-h-[70px]
                             ${enVuelo === m.id ? 'opacity-70' : ''}
                             ${soloLectura ? 'cursor-default' : 'cursor-pointer'}
@@ -249,7 +249,7 @@ export function ListaMisiones({
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
             role="status"
-            className="fixed inset-x-4 bottom-24 z-50 mx-auto flex max-w-[343px] items-center gap-2.5
+            className="fixed inset-x-4 bottom-24 z-50 mx-auto flex max-w-[343px] items-center gap-3
                        rounded-[var(--radius-inner)] bg-tinta px-4 py-3 t-cuerpo-fuerte
                        text-white shadow-n3"
           >
@@ -268,7 +268,7 @@ export function ListaMisiones({
             exit={{ opacity: 0, y: 12 }}
             transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
             role="alert"
-            className="fixed inset-x-4 bottom-24 z-50 mx-auto flex max-w-[343px] items-center gap-2.5
+            className="fixed inset-x-4 bottom-24 z-50 mx-auto flex max-w-[343px] items-center gap-3
                        rounded-[var(--radius-inner)] bg-aviso-100 px-4 py-3 t-cuerpo-fuerte
                        text-[#A33F63] shadow-n3"
           >
@@ -278,7 +278,7 @@ export function ListaMisiones({
             {error.accion === 'entrar' ? (
               <Link
                 href="/entrar"
-                className="t-label-alto flex-none rounded-[var(--radius-chip)] bg-white/80 px-3 py-1.5
+                className="t-label-alto flex-none rounded-[var(--radius-chip)] bg-white/80 px-3 py-2
                            text-[#A33F63]"
               >
                 Entrar
@@ -287,7 +287,7 @@ export function ListaMisiones({
               <button
                 type="button"
                 onClick={() => router.refresh()}
-                className="t-label-alto flex-none rounded-[var(--radius-chip)] bg-white/80 px-3 py-1.5
+                className="t-label-alto flex-none rounded-[var(--radius-chip)] bg-white/80 px-3 py-2
                            text-[#A33F63]"
               >
                 Reintentar

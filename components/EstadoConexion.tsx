@@ -30,7 +30,7 @@ export function EstadoConexion() {
           transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
           role="status"
           className="fixed inset-x-4 top-[calc(env(safe-area-inset-top)+12px)] z-[70] mx-auto flex
-                     max-w-[343px] items-center gap-2.5 rounded-[var(--radius-inner)]
+                     max-w-[343px] items-center gap-3 rounded-[var(--radius-inner)]
                      bg-tinta px-4 py-3 t-cuerpo-fuerte text-white shadow-n3"
         >
           <WifiOff size={18} className="flex-none" />

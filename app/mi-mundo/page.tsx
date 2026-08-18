@@ -5,7 +5,7 @@ import { Lock } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
 import { albumDe } from '@/lib/dia';
 import { NavInferior } from '@/components/NavInferior';
-import { NumeroQueCuenta } from '@/components/NumeroQueCuenta';
+import { ProgresoMundo } from '@/components/ProgresoMundo';
 import { Nube } from '@/components/Nube';
 
 export default async function MiMundo() {
@@ -24,31 +24,20 @@ export default async function MiMundo() {
           >
             Mi mundo
           </h1>
-          <p className="t-cuerpo mt-1.5 text-tinta-2">
+          <p className="t-cuerpo mt-2 text-tinta-2">
             Cada misión que cumplo abre un momento mío.
           </p>
         </header>
 
         <section
           className="relative mb-5 overflow-hidden rounded-[var(--radius-card)] p-5 shadow-n2"
-          style={{ background: 'linear-gradient(150deg,#A98BE0 0%,#C99AD4 52%,#F2A9C4 100%)' }}
+          style={{ background: 'linear-gradient(150deg,#A98BE0 0%,#C99AD4 52%,#E890B7 100%)' }}
         >
           <Nube className="absolute -right-5 -top-7 h-16 w-32 opacity-[0.14]" desde="#FFFFFF" hasta="#FFFFFF" />
           <p className="t-label-alto relative text-white/95">
             MOMENTOS ABIERTOS
           </p>
-          <p
-            className="t-heroe tabular relative mt-1 text-white"
-          >
-            <NumeroQueCuenta valor={abiertos} />
-            <span className="t-pagina opacity-90"> de </span>
-            {album.length}
-          </p>
-          <p className="t-cuerpo-fuerte relative mt-2 text-white">
-            {abiertos === album.length
-              ? '¡Abrí mi mundo entero!'
-              : 'Los que faltan se abren cuando los cumpla por primera vez.'}
-          </p>
+          <ProgresoMundo abiertos={abiertos} total={album.length} />
         </section>
 
         <ul className="grid grid-cols-2 gap-3">

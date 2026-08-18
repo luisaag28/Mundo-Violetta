@@ -35,7 +35,7 @@ export default async function MiSemana({
           >
             Mi semana
           </h1>
-          <p className="t-cuerpo mt-1.5 text-tinta-2">
+          <p className="t-cuerpo mt-2 text-tinta-2">
             Lo que fui construyendo, día a día.
           </p>
         </header>
@@ -76,7 +76,7 @@ export default async function MiSemana({
               const algo = d.hechas > 0;
 
               return (
-                <li key={d.fecha} className="flex flex-col items-center gap-1.5">
+                <li key={d.fecha} className="flex flex-col items-center gap-2">
                   <span className="t-label-alto text-tinta-2">{d.inicial}</span>
 
                   <span
@@ -108,7 +108,7 @@ export default async function MiSemana({
         {/* Números */}
         <section className="mb-4 grid grid-cols-2 gap-3">
           <div className="rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
-            <p className="t-label-alto flex items-center gap-1.5 text-durazno-700">
+            <p className="t-label-alto flex items-center gap-2 text-durazno-700">
               <Flame size={14} fill="#D18E2E" className="text-durazno-700" />
               MI RACHA
             </p>
@@ -117,7 +117,7 @@ export default async function MiSemana({
             >
               <NumeroQueCuenta valor={racha} />
             </p>
-            <p className="t-label mt-1.5 text-durazno-700/85">
+            <p className="t-label mt-2 text-durazno-700/85">
               {racha === 1 ? 'día seguido' : 'días seguidos'}
             </p>
           </div>
@@ -131,7 +131,7 @@ export default async function MiSemana({
             >
               <NumeroQueCuenta valor={s.totalHechas} />
             </p>
-            <p className="t-label mt-1.5 text-cielo-700/85">misiones cumplidas</p>
+            <p className="t-label mt-2 text-cielo-700/85">misiones cumplidas</p>
           </div>
         </section>
 
@@ -165,7 +165,7 @@ export default async function MiSemana({
           >
             Mis últimas 12 semanas
           </h2>
-          <p className="t-label mt-1.5 font-semibold text-tinta-2">
+          <p className="t-label mt-2 font-semibold text-tinta-2">
             Mientras más lleno el cuadrito, más misiones cumplí ese día.
           </p>
 
@@ -193,7 +193,7 @@ export default async function MiSemana({
             ))}
           </div>
 
-          <div className="mt-3 flex items-center justify-end gap-1.5">
+          <div className="mt-3 flex items-center justify-end gap-2">
             <span className="t-label text-tinta-3">Menos</span>
             <span className="h-3 w-3 rounded-[3px] bg-lav-50" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-200" />

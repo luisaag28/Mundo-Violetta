@@ -42,7 +42,7 @@ export default async function Yo() {
         </header>
 
         <section className="mb-3 mt-4 rounded-[var(--radius-card)] bg-superficie p-5 shadow-n1">
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 flex-none items-center justify-center
                              rounded-[var(--radius-inner)] bg-durazno-100">
               <Star size={22} fill="#D18E2E" className="text-durazno-700" />
@@ -113,7 +113,7 @@ export default async function Yo() {
                   </span>
 
                   {actual && (
-                    <span className="t-label-alto flex-none rounded-[var(--radius-chip)] bg-lav-50 px-2.5 py-1
+                    <span className="t-label-alto flex-none rounded-[var(--radius-chip)] bg-lav-50 px-3 py-1
                                      text-lav-700">
                       AQUÍ ESTOY
                     </span>
@@ -134,7 +134,7 @@ export default async function Yo() {
             >
               {nivel.hechasTotales}
             </p>
-            <p className="t-label mt-1.5 text-menta-700/85">misiones cumplidas</p>
+            <p className="t-label mt-2 text-menta-700/85">misiones cumplidas</p>
           </div>
 
           <div className="rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
@@ -146,13 +146,13 @@ export default async function Yo() {
             >
               {racha}
             </p>
-            <p className="t-label mt-1.5 text-durazno-700/85">
+            <p className="t-label mt-2 text-durazno-700/85">
               {racha === 1 ? 'día seguido' : 'días seguidos'}
             </p>
           </div>
         </section>
 
-        <section className="mb-4 flex items-start gap-2.5 rounded-[var(--radius-card)]
+        <section className="mb-4 flex items-start gap-3 rounded-[var(--radius-card)]
                             bg-lav-50 p-4">
           <ShieldCheck size={20} className="mt-0.5 flex-none text-lav-700" />
           <p className="t-label font-semibold text-tinta-2">
