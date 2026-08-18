@@ -58,7 +58,9 @@ export default async function MiMundo() {
                 />
                 {m.veces === 0 && (
                   <span className="absolute inset-0 flex items-center justify-center">
-                    <Lock size={26} className="text-[#A98FCE]" strokeWidth={2.4} />
+                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-tinta/45">
+                      <Lock size={22} className="text-white" strokeWidth={2.4} />
+                    </span>
                   </span>
                 )}
                 {m.veces > 0 && (

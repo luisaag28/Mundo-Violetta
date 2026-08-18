@@ -58,6 +58,7 @@ export default function Registro() {
             etiqueta="MI NOMBRE"
             placeholder="Violetta"
             autoComplete="given-name"
+            maxLength={24}
             icono={<Smile size={20} />}
           />
           <CampoTexto

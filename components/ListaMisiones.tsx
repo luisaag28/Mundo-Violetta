@@ -6,7 +6,7 @@ import { ilustracion } from '@/lib/assets';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, Undo2, AlertCircle, Minus } from 'lucide-react';
+import { Check, Undo2, AlertCircle, Minus, Plus } from 'lucide-react';
 import type { Mision } from '@/lib/dia';
 import { accionAlternarMision } from '@/app/acciones';
 
@@ -25,7 +25,7 @@ function Vasos({
         {Array.from({ length: meta }).map((_, i) => (
           <span
             key={i}
-            className={`h-5 w-3.5 rounded-[3px_3px_5px_5px] border-2 transition-colors duration-300 ${
+            className={`h-5 w-3.5 rounded-[var(--radius-chip)] border-2 transition-colors duration-300 ${
               i < avance
                 ? claro
                   ? 'border-white bg-white'
@@ -103,14 +103,133 @@ export function ListaMisiones({
   }
 
   const pendientes = optimistas.filter((m) => !m.completado);
+  // Las que ya tienen avance a medias van primero: retoman el impulso que ya empezó.
+  const enProgreso = pendientes.filter((m) => m.avance > 0);
+  const sinEmpezar = pendientes.filter((m) => m.avance === 0);
   const hechas = optimistas.filter((m) => m.completado);
-  const ordenadas = [...pendientes, ...hechas];
+  const ordenadas = [...enProgreso, ...sinEmpezar, ...hechas];
 
   return (
     <>
       <ul className="space-y-2.5" aria-live="polite">
         {ordenadas.map((m, i) => {
           const esSiguiente = !m.completado && i === 0;
+          const esVasos = m.tipo === 'vasos';
+
+          const claseFila = `flex w-full items-center gap-3 rounded-[var(--radius-card)] p-3 pr-4
+                            text-left transition-colors duration-300 min-h-[70px]
+                            ${enVuelo === m.id ? 'opacity-70' : ''}
+                  ${
+                    m.completado
+                      ? 'bg-menta-100'
+                      : esSiguiente
+                        ? 'bg-gradient-to-r from-lav-600 to-[#AE7CDE] shadow-n2'
+                        : 'bg-superficie shadow-n1'
+                  }`;
+
+          const contenido = (
+            <>
+              <Image
+                src={ilustracion(m.ilustracion)}
+                alt=""
+                width={320}
+                height={320}
+                className={`h-12 w-12 flex-none rounded-[var(--radius-inner)] object-cover
+                            transition-all duration-500
+                            ${m.completado ? '' : 'grayscale-[0.55] opacity-80'}`}
+              />
+
+              <span className="min-w-0 flex-1">
+                <span
+                  className={`t-cuerpo-fuerte block
+                    ${
+                      m.completado
+                        ? 'text-menta-700'
+                        : esSiguiente
+                          ? 'text-white'
+                          : 'text-tinta'
+                    }`}
+                >
+                  {m.titulo}
+                </span>
+
+                {esVasos ? (
+                  <Vasos avance={m.avance} meta={m.meta} claro={esSiguiente} />
+                ) : (
+                  <span
+                    className={`t-label mt-1 block truncate
+                      ${
+                        m.completado
+                          ? 'text-[#3E8168]'
+                          : esSiguiente
+                            ? 'text-white/90'
+                            : 'text-tinta-2'
+                      }`}
+                  >
+                    {m.completado && m.hechoALas
+                      ? `Lo hice a las ${m.hechoALas}`
+                      : esSiguiente
+                        ? 'Mi siguiente misión'
+                        : m.detalle}
+                  </span>
+                )}
+              </span>
+
+              {esVasos ? (
+                <span className="flex flex-none items-center gap-2">
+                  {m.avance > 0 && (
+                    <button
+                      type="button"
+                      disabled={soloLectura || enVuelo === m.id}
+                      onClick={() => alternar(m, -1)}
+                      aria-label="Quitar un vaso"
+                      className={`flex h-9 w-9 flex-none items-center justify-center rounded-full
+                                  border-[2.5px] transition-transform active:scale-90
+                        ${
+                          esSiguiente
+                            ? 'border-white/70 bg-white/15 text-white'
+                            : 'border-lav-200 bg-white text-lav-700'
+                        }`}
+                    >
+                      <Minus size={15} strokeWidth={3} />
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    disabled={soloLectura || enVuelo === m.id || m.avance >= m.meta}
+                    onClick={() => alternar(m, 1)}
+                    aria-label="Agregar un vaso"
+                    className={`flex h-11 w-11 flex-none items-center justify-center rounded-full
+                                border-[2.5px] transition-transform active:scale-90 disabled:opacity-50
+                      ${
+                        esSiguiente
+                          ? 'border-white/80 bg-white/15 text-white'
+                          : 'border-lav-200 bg-white text-lav-700'
+                      }`}
+                  >
+                    <Plus size={18} strokeWidth={3} />
+                  </button>
+                </span>
+              ) : (
+                <span className="flex h-11 w-11 flex-none items-center justify-center">
+                  <motion.span
+                    animate={{ scale: m.completado ? [1, 1.18, 1] : 1 }}
+                    transition={{ duration: 0.34, ease: [0.34, 1.56, 0.64, 1] }}
+                    className={`flex h-7 w-7 items-center justify-center rounded-[var(--radius-chip)] border-[2.5px]
+                      ${
+                        m.completado
+                          ? 'border-menta bg-menta'
+                          : esSiguiente
+                            ? 'border-white/80 bg-white/15'
+                            : 'border-lav-200 bg-white'
+                      }`}
+                  >
+                    {m.completado && <Check size={15} strokeWidth={3.6} className="text-white" />}
+                  </motion.span>
+                </span>
+              )}
+            </>
+          );
 
           return (
             <motion.li
@@ -125,116 +244,30 @@ export function ListaMisiones({
                 ease: [0.16, 1, 0.3, 1],
               }}
             >
-              <motion.div
-                role="button"
-                tabIndex={soloLectura ? -1 : 0}
-                onClick={() => alternar(m, 1)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    alternar(m, 1);
-                  }
-                }}
-                whileTap={{ scale: soloLectura ? 1 : 0.975 }}
-                aria-pressed={m.completado}
-                aria-busy={enVuelo === m.id}
-                aria-disabled={soloLectura || enVuelo === m.id}
-                className={`flex w-full items-center gap-3 rounded-[var(--radius-card)] p-3 pr-4
-                            text-left transition-colors duration-300 min-h-[70px]
-                            ${enVuelo === m.id ? 'opacity-70' : ''}
-                            ${soloLectura ? 'cursor-default' : 'cursor-pointer'}
-                  ${
-                    m.completado
-                      ? 'bg-menta-100'
-                      : esSiguiente
-                        ? 'bg-gradient-to-r from-lav-600 to-[#AE7CDE] shadow-n2'
-                        : 'bg-superficie shadow-n1'
-                  }`}
-              >
-                <Image
-                  src={ilustracion(m.ilustracion)}
-                  alt=""
-                  width={320}
-                  height={320}
-                  className={`h-12 w-12 flex-none rounded-[var(--radius-inner)] object-cover
-                              transition-all duration-500
-                              ${m.completado ? '' : 'grayscale-[0.55] opacity-80'}`}
-                />
-
-                <span className="min-w-0 flex-1">
-                  <span
-                    className={`t-cuerpo-fuerte block
-                      ${
-                        m.completado
-                          ? 'text-menta-700'
-                          : esSiguiente
-                            ? 'text-white'
-                            : 'text-tinta'
-                      }`}
-                  >
-                    {m.titulo}
-                  </span>
-
-                  {m.tipo === 'vasos' ? (
-                    <Vasos avance={m.avance} meta={m.meta} claro={esSiguiente} />
-                  ) : (
-                    <span
-                      className={`t-label mt-1 block truncate
-                        ${
-                          m.completado
-                            ? 'text-[#3E8168]'
-                            : esSiguiente
-                              ? 'text-white/90'
-                              : 'text-tinta-2'
-                        }`}
-                    >
-                      {m.completado && m.hechoALas
-                        ? `Lo hice a las ${m.hechoALas}`
-                        : esSiguiente
-                          ? 'Mi siguiente misión'
-                          : m.detalle}
-                    </span>
-                  )}
-                </span>
-
-                {m.tipo === 'vasos' && m.avance > 0 ? (
-                  <button
-                    type="button"
-                    disabled={soloLectura || enVuelo === m.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      alternar(m, -1);
-                    }}
-                    aria-label="Quitar un vaso"
-                    className={`flex h-11 w-11 flex-none items-center justify-center rounded-full
-                                border-[2.5px] transition-colors active:scale-90
-                      ${
-                        esSiguiente
-                          ? 'border-white/70 bg-white/15 text-white'
-                          : 'border-lav-200 bg-white text-lav-700'
-                      }`}
-                  >
-                    <Minus size={17} strokeWidth={3} />
-                  </button>
-                ) : (
-                  <span className="flex h-11 w-11 flex-none items-center justify-center">
-                    <motion.span
-                      animate={{ scale: m.completado ? [1, 1.18, 1] : 1 }}
-                      transition={{ duration: 0.34, ease: [0.34, 1.56, 0.64, 1] }}
-                      className={`flex h-7 w-7 items-center justify-center rounded-[9px] border-[2.5px]
-                        ${
-                          m.completado
-                            ? 'border-menta bg-menta'
-                            : esSiguiente
-                              ? 'border-white/80 bg-white/15'
-                              : 'border-lav-200 bg-white'
-                        }`}
-                    >
-                      {m.completado && <Check size={15} strokeWidth={3.6} className="text-white" />}
-                    </motion.span>
-                  </span>
-                )}
-              </motion.div>
+              {esVasos ? (
+                <div aria-busy={enVuelo === m.id} className={claseFila}>
+                  {contenido}
+                </div>
+              ) : (
+                <motion.div
+                  role="button"
+                  tabIndex={soloLectura ? -1 : 0}
+                  onClick={() => alternar(m, 1)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      alternar(m, 1);
+                    }
+                  }}
+                  whileTap={{ scale: soloLectura ? 1 : 0.975 }}
+                  aria-pressed={m.completado}
+                  aria-busy={enVuelo === m.id}
+                  aria-disabled={soloLectura || enVuelo === m.id}
+                  className={`${claseFila} ${soloLectura ? 'cursor-default' : 'cursor-pointer'}`}
+                >
+                  {contenido}
+                </motion.div>
+              )}
             </motion.li>
           );
         })}

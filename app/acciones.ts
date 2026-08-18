@@ -19,6 +19,7 @@ export async function accionRegistro(
   const contrasena = String(datos.get('contrasena') ?? '');
 
   if (nombre.length < 2) return { error: 'Escribe tu nombre para saludarte.', campo: 'nombre' };
+  if (nombre.length > 24) return { error: 'Tu nombre es muy largo (máximo 24 letras).', campo: 'nombre' };
 
   const eUsuario = validarUsuario(usuario);
   if (eUsuario) return { error: eUsuario, campo: 'usuario' };

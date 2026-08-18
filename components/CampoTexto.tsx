@@ -11,10 +11,11 @@ type Props = {
   autoComplete?: string;
   icono: React.ReactNode;
   defaultValue?: string;
+  maxLength?: number;
 };
 
 export function CampoTexto({
-  nombre, etiqueta, tipo = 'text', placeholder, autoComplete, icono, defaultValue,
+  nombre, etiqueta, tipo = 'text', placeholder, autoComplete, icono, defaultValue, maxLength,
 }: Props) {
   const id = useId();
   const [visible, setVisible] = useState(false);
@@ -42,6 +43,7 @@ export function CampoTexto({
           placeholder={placeholder}
           autoComplete={autoComplete}
           defaultValue={defaultValue}
+          maxLength={maxLength}
           className="h-14 w-full rounded-[var(--radius-pill)] border-2 border-lav-100 bg-hundido
                      pl-12 pr-12 text-[16px] font-bold text-tinta
                      placeholder:font-semibold placeholder:text-tinta-3

@@ -94,7 +94,7 @@ export default async function MiDia({
                 </Link>
               )}
             </div>
-            <h1 className="t-pagina truncate text-tinta">
+            <h1 className="t-pagina line-clamp-2 text-tinta">
               {esHoy ? `¡Hola, ${usuaria.nombre}!` : dia.etiquetaFecha}
             </h1>
           </div>
@@ -171,7 +171,9 @@ export default async function MiDia({
                   />
                   {!m.abierto && (
                     <span className="absolute inset-0 flex items-center justify-center">
-                      <Lock size={17} className="text-[#A98FCE]" strokeWidth={2.4} />
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-tinta/45">
+                        <Lock size={16} className="text-white" strokeWidth={2.4} />
+                      </span>
                     </span>
                   )}
                   {m.nuevo && (
