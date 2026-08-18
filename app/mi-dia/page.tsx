@@ -95,7 +95,7 @@ export default async function MiDia({
               )}
             </div>
             <h1 className="t-pagina line-clamp-2 text-tinta">
-              {esHoy ? `¡Hola, ${usuaria.nombre}!` : dia.etiquetaFecha}
+              {esHoy ? 'Mi día' : dia.etiquetaFecha}
             </h1>
           </div>
 
@@ -141,7 +141,7 @@ export default async function MiDia({
           >
             <div className="mb-3 flex items-center justify-between gap-3">
               <div className="min-w-0">
-                <p className="t-seccion text-tinta">Mi mundo</p>
+                <p className="t-label-alto uppercase text-tinta">Mi mundo</p>
                 <p className="t-label mt-0.5 truncate text-lav-700">
                   {dia.ultimoMomento ? `Hoy sumé: ${dia.ultimoMomento}` : 'Aún sin abrir hoy'}
                 </p>
@@ -201,7 +201,7 @@ export default async function MiDia({
         )}
 
         {/* ── Misiones ── */}
-        <h2 className="t-seccion mb-3 text-tinta">Mis misiones de hoy</h2>
+        <h2 className="t-label-alto mb-3 uppercase text-tinta-2">Mis misiones de hoy</h2>
 
         {dia.total === 0 ? (
           <div className="rounded-[var(--radius-card)] bg-superficie p-7 text-center shadow-n1">
