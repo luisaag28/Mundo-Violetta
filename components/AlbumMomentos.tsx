@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { ilustracion } from '@/lib/assets';
 import { Lock, Sparkles, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -23,8 +24,43 @@ const FILTROS: Array<{ valor: Filtro; etiqueta: string }> = [
 ];
 
 export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
-  const [filtro, setFiltro] = useState<Filtro>('todos');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const param = searchParams.get('filtro');
+  const filtro: Filtro = param === 'abiertos' || param === 'pendientes' ? param : 'todos';
+
   const [elegido, setElegido] = useState<ItemAlbum | null>(null);
+  const cerrarBoton = useRef<HTMLButtonElement>(null);
+  const disparador = useRef<HTMLElement | null>(null);
+
+  function cambiarFiltro(nuevo: Filtro) {
+    const params = new URLSearchParams(searchParams.toString());
+    if (nuevo === 'todos') params.delete('filtro');
+    else params.set('filtro', nuevo);
+    router.replace(params.size ? `${pathname}?${params.toString()}` : pathname, { scroll: false });
+  }
+
+  function abrir(m: ItemAlbum, e: React.MouseEvent<HTMLElement>) {
+    disparador.current = e.currentTarget;
+    setElegido(m);
+  }
+
+  function cerrar() {
+    setElegido(null);
+    disparador.current?.focus();
+  }
+
+  useEffect(() => {
+    if (!elegido) return;
+    cerrarBoton.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') cerrar();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elegido]);
 
   const visibles = album.filter((m) =>
     filtro === 'todos' ? true : filtro === 'abiertos' ? m.veces > 0 : m.veces === 0
@@ -38,7 +74,7 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
             key={valor}
             type="button"
             whileTap={{ scale: 0.955 }}
-            onClick={() => setFiltro(valor)}
+            onClick={() => cambiarFiltro(valor)}
             aria-pressed={filtro === valor}
             className={`t-label-alto rounded-[var(--radius-chip)] px-3 py-2 transition-colors duration-200 ${
               filtro === valor
@@ -57,65 +93,70 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
         </p>
       ) : (
         <ul className="grid grid-cols-2 gap-3">
-          {visibles.map((m, i) => (
-            <motion.li
-              key={m.titulo}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.32,
-                delay: Math.min(i, 9) * 0.06,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-            >
-              <motion.button
-                type="button"
-                whileTap={{ scale: 0.975 }}
-                onClick={() => setElegido(m)}
-                className="block w-full overflow-hidden rounded-[var(--radius-card)] bg-superficie
-                           text-left shadow-n1"
+          <AnimatePresence initial={false}>
+            {visibles.map((m, i) => (
+              <motion.li
+                key={m.titulo}
+                layout
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                transition={{
+                  layout: { duration: 0.28, ease: [0.16, 1, 0.3, 1] },
+                  duration: 0.32,
+                  delay: Math.min(i, 9) * 0.06,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
               >
-                <div className="relative aspect-square">
-                  <Image
-                    src={ilustracion(m.ilustracion)}
-                    alt={m.titulo}
-                    width={320}
-                    height={320}
-                    className={`h-full w-full object-cover ${
-                      m.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.28] contrast-[0.6]'
-                    }`}
-                  />
-                  {m.veces === 0 && (
-                    <span className="absolute inset-0 flex items-center justify-center">
-                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-tinta/45">
-                        <Lock size={22} className="text-white" strokeWidth={2.4} />
+                <motion.button
+                  type="button"
+                  whileTap={{ scale: 0.975 }}
+                  onClick={(e) => abrir(m, e)}
+                  className="block w-full overflow-hidden rounded-[var(--radius-card)] bg-superficie
+                             text-left shadow-n1"
+                >
+                  <div className="relative aspect-square">
+                    <Image
+                      src={ilustracion(m.ilustracion)}
+                      alt={m.titulo}
+                      width={320}
+                      height={320}
+                      className={`h-full w-full object-cover ${
+                        m.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.28] contrast-[0.6]'
+                      }`}
+                    />
+                    {m.veces === 0 && (
+                      <span className="absolute inset-0 flex items-center justify-center">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-full bg-tinta/45">
+                          <Lock size={22} className="text-white" strokeWidth={2.4} />
+                        </span>
                       </span>
-                    </span>
-                  )}
-                  {m.nuevo && (
-                    <span
-                      className="absolute -left-1 -top-1 flex h-7 w-7 -rotate-12 items-center
-                                 justify-center rounded-full border-2 border-white bg-menta shadow-n1"
-                      title="Lo abrí hoy"
-                    >
-                      <Sparkles size={14} className="text-white" fill="#fff" />
-                    </span>
-                  )}
-                </div>
+                    )}
+                    {m.nuevo && (
+                      <span
+                        className="absolute -left-1 -top-1 flex h-7 w-7 -rotate-12 items-center
+                                   justify-center rounded-full border-2 border-white bg-menta shadow-n1"
+                        title="Lo abrí hoy"
+                      >
+                        <Sparkles size={14} className="text-white" fill="#fff" />
+                      </span>
+                    )}
+                  </div>
 
-                <div className="p-3">
-                  <p className="t-cuerpo-fuerte text-tinta">{m.titulo}</p>
-                  <p className="t-label mt-1 text-tinta-2">
-                    {m.veces === 0
-                      ? 'Todavía por abrir'
-                      : m.veces === 1
-                        ? 'Lo hice 1 vez'
-                        : `Lo hice ${m.veces} veces`}
-                  </p>
-                </div>
-              </motion.button>
-            </motion.li>
-          ))}
+                  <div className="p-3">
+                    <p className="t-cuerpo-fuerte text-tinta">{m.titulo}</p>
+                    <p className="t-label mt-1 text-tinta-2">
+                      {m.veces === 0
+                        ? 'Todavía por abrir'
+                        : m.veces === 1
+                          ? 'Lo hice 1 vez'
+                          : `Lo hice ${m.veces} veces`}
+                    </p>
+                  </div>
+                </motion.button>
+              </motion.li>
+            ))}
+          </AnimatePresence>
         </ul>
       )}
 
@@ -126,7 +167,7 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.22 }}
-            onClick={() => setElegido(null)}
+            onClick={cerrar}
             role="dialog"
             aria-modal="true"
             aria-label={elegido.titulo}
@@ -159,8 +200,9 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
                   </span>
                 )}
                 <button
+                  ref={cerrarBoton}
                   type="button"
-                  onClick={() => setElegido(null)}
+                  onClick={cerrar}
                   aria-label="Cerrar"
                   className="absolute right-2.5 top-2.5 flex h-9 w-9 items-center justify-center
                              rounded-full bg-tinta/45 text-white"

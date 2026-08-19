@@ -1,10 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { MiniConfeti } from './MiniConfeti';
 
 /** Mismo patrón que ProgresoDia: el número y la frase animan juntos, nunca desincronizados. */
 export function ProgresoMundo({ abiertos, total }: { abiertos: number; total: number }) {
   const [n, setN] = useState(0);
+  const [celebrar, setCelebrar] = useState(false);
   const previo = useRef<number | null>(null);
 
   useEffect(() => {
@@ -37,8 +39,21 @@ export function ProgresoMundo({ abiertos, total }: { abiertos: number; total: nu
     return () => cancelAnimationFrame(raf);
   }, [abiertos]);
 
+  // El hito de completar el álbum entero se celebra una sola vez.
+  useEffect(() => {
+    if (total > 0 && abiertos === total && !localStorage.getItem('mundo-completo')) {
+      localStorage.setItem('mundo-completo', '1');
+      setCelebrar(true);
+      const listo = setTimeout(() => setCelebrar(false), 900);
+      return () => clearTimeout(listo);
+    }
+  }, [abiertos, total]);
+
   return (
     <>
+      <span className="relative">
+        <MiniConfeti activo={celebrar} />
+      </span>
       <p className="t-heroe tabular relative mt-1 text-white">
         {n}
         <span className="t-pagina opacity-90"> de </span>
