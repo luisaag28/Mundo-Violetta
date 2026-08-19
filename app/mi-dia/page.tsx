@@ -94,14 +94,14 @@ export default async function MiDia({
                 </Link>
               )}
             </div>
-            <h1 className="t-cuerpo-fuerte line-clamp-2 text-tinta">
+            <h1 className="t-seccion line-clamp-2 text-tinta">
               {esHoy ? 'Mi día' : dia.etiquetaFecha}
             </h1>
           </div>
 
           <span className="t-label flex flex-none items-center gap-2 rounded-[var(--radius-chip)]
-                           bg-durazno-100 px-3 py-2 font-extrabold text-durazno-700">
-            <Star size={15} fill="#D18E2E" className="text-durazno-700" />
+                           bg-lav-100 px-3 py-2 font-extrabold text-lav-700">
+            <Star size={15} fill="#6B47A8" className="text-lav-700" />
             Nivel {nivel.numero}
           </span>
         </header>
@@ -133,11 +133,8 @@ export default async function MiDia({
         {dia.momentos.length > 0 && (
           <Link
             href="/mi-mundo"
-            className="mb-4 block overflow-hidden rounded-[var(--radius-card)] p-4 shadow-n2
+            className="mb-4 block overflow-hidden rounded-[var(--radius-card)] bg-lav-50 p-4 shadow-n1
                        transition-transform duration-150 active:scale-[0.985]"
-            style={{
-              background: 'linear-gradient(168deg,#DCEEFB 0%,#EBE1FA 48%,#FCE7DB 100%)',
-            }}
           >
             <div className="mb-3 flex items-center justify-between gap-3">
               <div className="min-w-0">
