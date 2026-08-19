@@ -224,7 +224,7 @@ export default async function MiDia({
         <section className="mt-4 grid grid-cols-2 gap-3">
           <div className="rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
             <p className="t-label-alto flex items-center gap-2 text-durazno-700">
-              <Flame size={15} fill="#D18E2E" className="text-durazno-700" />
+              <Flame size={15} fill="#8A5A0E" className="text-durazno-700" />
               MI RACHA
             </p>
             <p

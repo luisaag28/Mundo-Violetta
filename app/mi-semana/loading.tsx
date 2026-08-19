@@ -4,20 +4,21 @@ export default function Cargando() {
       <main className="min-h-0 flex-1 overflow-hidden px-4 pb-6" aria-busy>
         <span className="sr-only">Cargando mi semana…</span>
 
-        <div className="py-5">
+        <div className="py-3">
           <div className="h-7 w-40 animate-pulse rounded bg-lav-100" />
           <div className="mt-2 h-4 w-56 animate-pulse rounded bg-lav-100" />
         </div>
 
-        <div className="mb-4 h-14 animate-pulse rounded-[var(--radius-card)] bg-lav-100" />
-        <div className="mb-4 h-[104px] animate-pulse rounded-[var(--radius-card)] bg-superficie" />
+        <div className="mb-3 h-14 animate-pulse rounded-[var(--radius-card)] bg-lav-100" />
+        <div className="mb-3 h-[104px] animate-pulse rounded-[var(--radius-card)] bg-superficie" />
 
-        <div className="mb-4 grid grid-cols-2 gap-3">
+        <div className="mb-3 grid grid-cols-2 gap-3">
           <div className="h-[104px] animate-pulse rounded-[var(--radius-card)] bg-lav-100" />
           <div className="h-[104px] animate-pulse rounded-[var(--radius-card)] bg-lav-100/70" />
         </div>
 
-        <div className="h-32 animate-pulse rounded-[var(--radius-card)] bg-superficie" />
+        <div className="mb-3 h-24 animate-pulse rounded-[var(--radius-card)] bg-superficie" />
+        <div className="h-40 animate-pulse rounded-[var(--radius-card)] bg-lav-50" />
       </main>
     </div>
   );

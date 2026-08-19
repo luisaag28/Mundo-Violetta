@@ -45,7 +45,7 @@ export default async function Yo() {
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 flex-none items-center justify-center
                              rounded-[var(--radius-inner)] bg-durazno-100">
-              <Star size={22} fill="#D18E2E" className="text-durazno-700" />
+              <Star size={22} fill="#8A5A0E" className="text-durazno-700" />
             </span>
             <div className="min-w-0">
               <p className="t-label-alto text-tinta-2">NIVEL {nivel.numero}</p>

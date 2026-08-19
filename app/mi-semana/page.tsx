@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Flame, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Flame, Check, BookOpen } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
 import { resumenSemana, rachaDe, hoyLocal, lunesDe, mapaConstancia, correrDias } from '@/lib/dia';
 import { NavInferior } from '@/components/NavInferior';
 import { NumeroQueCuenta } from '@/components/NumeroQueCuenta';
+import { Entrada } from '@/components/Entrada';
 
 export default async function MiSemana({
   searchParams,
@@ -29,7 +30,7 @@ export default async function MiSemana({
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
       <main className="sin-barra min-h-0 flex-1 overflow-y-auto px-4 pb-6">
-        <header className="py-5">
+        <header className="py-3">
           <h1
             className="t-pagina lettering text-tinta"
           >
@@ -41,7 +42,7 @@ export default async function MiSemana({
         </header>
 
         {/* Navegación entre semanas */}
-        <div className="mb-4 flex items-center justify-between gap-2 rounded-[var(--radius-card)]
+        <Entrada className="mb-3 flex items-center justify-between gap-2 rounded-[var(--radius-card)]
                         bg-superficie p-2 shadow-n1">
           <Link
             href={`/mi-semana?semana=${anterior}`}
@@ -66,21 +67,22 @@ export default async function MiSemana({
           ) : (
             <span className="h-11 w-11 flex-none" aria-hidden />
           )}
-        </div>
+        </Entrada>
 
         {/* Los 7 días */}
-        <section className="mb-4 rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
+        <Entrada delay={0.05} className="mb-3 rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
           <ul className="flex justify-between">
             {s.dias.map((d) => {
               const completo = d.total > 0 && d.hechas === d.total;
               const algo = d.hechas > 0;
+              const tieneDatos = d.total > 0 && !d.esFuturo;
 
-              return (
-                <li key={d.fecha} className="flex flex-col items-center gap-2">
+              const celda = (
+                <>
                   <span className="t-label-alto text-tinta-2">{d.inicial}</span>
 
                   <span
-                    className={`t-label-alto flex h-10 w-10 items-center justify-center rounded-[13px]
+                    className={`t-label-alto flex h-10 w-10 items-center justify-center rounded-[var(--radius-chip)]
                                 transition-colors
                       ${
                         completo
@@ -97,19 +99,35 @@ export default async function MiSemana({
                   </span>
 
                   <span className="t-label tabular text-tinta-3">
-                    {d.total > 0 && !d.esFuturo ? `${d.hechas}/${d.total}` : '—'}
+                    {tieneDatos ? `${d.hechas}/${d.total}` : '—'}
                   </span>
+                </>
+              );
+
+              return (
+                <li key={d.fecha} className="flex flex-col items-center gap-2">
+                  {tieneDatos ? (
+                    <Link
+                      href={`/mi-dia?fecha=${d.fecha}`}
+                      aria-label={`Ver ${d.fecha}`}
+                      className="flex flex-col items-center gap-2 transition-transform active:scale-95"
+                    >
+                      {celda}
+                    </Link>
+                  ) : (
+                    <span className="flex flex-col items-center gap-2">{celda}</span>
+                  )}
                 </li>
               );
             })}
           </ul>
-        </section>
+        </Entrada>
 
         {/* Números */}
-        <section className="mb-4 grid grid-cols-2 gap-3">
+        <Entrada delay={0.1} className="mb-3 grid grid-cols-2 gap-3">
           <div className="rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
             <p className="t-label-alto flex items-center gap-2 text-durazno-700">
-              <Flame size={14} fill="#D18E2E" className="text-durazno-700" />
+              <Flame size={14} fill="#8A5A0E" className="text-durazno-700" />
               MI RACHA
             </p>
             <p
@@ -133,33 +151,31 @@ export default async function MiSemana({
             </p>
             <p className="t-label mt-2 text-cielo-700/85">misiones cumplidas</p>
           </div>
-        </section>
+        </Entrada>
 
         {/* La narrativa, no el porcentaje */}
-        <section
-          className="overflow-hidden rounded-[var(--radius-card)] p-5 shadow-n2"
-          style={{ background: 'linear-gradient(168deg,#DCEEFB 0%,#EBE1FA 48%,#FCE7DB 100%)' }}
-        >
-          <p
-            className="t-seccion text-tinta"
-          >
+        <Entrada delay={0.15} className="mb-3 overflow-hidden rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
+          <p className="t-label-alto flex items-center gap-2 text-tinta">
+            <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-lav-100 text-lav-700">
+              <BookOpen size={16} strokeWidth={2.4} />
+            </span>
             Mi historia de la semana
           </p>
 
           {s.narrativa.length > 0 ? (
-            <p className="t-cuerpo mt-2.5 text-tinta">
+            <p className="t-cuerpo mt-2.5 text-tinta-2">
               Esta semana {s.narrativa.join(', ')}. Cada semana estoy construyendo hábitos más fuertes.
             </p>
           ) : (
-            <p className="t-cuerpo mt-2.5 text-tinta">
+            <p className="t-cuerpo mt-2.5 text-tinta-2">
               Esta semana apenas empieza. Cuando cumpla mis primeras misiones,
               aquí voy a ver lo que fui construyendo.
             </p>
           )}
-        </section>
+        </Entrada>
 
         {/* Mapa de constancia — 12 semanas de un vistazo */}
-        <section className="mt-4 rounded-[var(--radius-card)] bg-superficie p-5 shadow-n1">
+        <Entrada delay={0.2} className="rounded-[var(--radius-card)] bg-hundido p-4">
           <h2
             className="t-seccion text-tinta"
           >
@@ -178,9 +194,9 @@ export default async function MiSemana({
                     title={celda.fecha}
                     className={`aspect-square rounded-[4px] ${
                       celda.futuro
-                        ? 'bg-hundido/50'
+                        ? 'bg-superficie/60'
                         : celda.nivel === 0
-                          ? 'bg-lav-50'
+                          ? 'bg-superficie'
                           : celda.nivel === 1
                             ? 'bg-lav-200'
                             : celda.nivel === 2
@@ -195,13 +211,13 @@ export default async function MiSemana({
 
           <div className="mt-3 flex items-center justify-end gap-2">
             <span className="t-label text-tinta-3">Menos</span>
-            <span className="h-3 w-3 rounded-[3px] bg-lav-50" />
+            <span className="h-3 w-3 rounded-[3px] bg-superficie" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
             <span className="t-label text-tinta-3">Más</span>
           </div>
-        </section>
+        </Entrada>
       </main>
 
       <NavInferior />
