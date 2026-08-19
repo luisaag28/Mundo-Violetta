@@ -21,6 +21,11 @@ const cuerpo = Nunito({
 export const metadata: Metadata = {
   title: 'El Mundo de Violetta',
   description: 'Mis hábitos, mis misiones y mi mundo que crece cada día.',
+  appleWebApp: {
+    capable: true,
+    title: 'Violetta',
+    statusBarStyle: 'default',
+  },
 };
 
 export const viewport: Viewport = {
