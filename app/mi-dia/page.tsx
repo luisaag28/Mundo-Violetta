@@ -201,7 +201,7 @@ export default async function MiDia({
         )}
 
         {/* ── Misiones: panel hundido — el 3er nivel de profundidad de la ficha ── */}
-        <section className="rounded-[var(--radius-card)] bg-lav-50 p-2">
+        <section className="rounded-[var(--radius-card)] bg-lav-50 px-1 py-3">
           <h2 className="t-label-alto mb-3 px-1 uppercase text-tinta-2">Mis misiones de hoy</h2>
 
           {dia.total === 0 ? (
