@@ -56,6 +56,12 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
     cerrarBoton.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') cerrar();
+      // El botón de cerrar es el único elemento enfocable del modal: el trampolín de foco
+      // más simple y correcto es no dejar que Tab/Shift+Tab lo saquen de ahí.
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        cerrarBoton.current?.focus();
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
@@ -79,7 +85,7 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
             className={`t-label-alto rounded-[var(--radius-chip)] px-3 py-2 transition-colors duration-200 ${
               filtro === valor
                 ? 'bg-lav-500 text-white'
-                : 'bg-lav-50 text-lav-700'
+                : 'bg-superficie text-lav-700 shadow-n1'
             }`}
           >
             {etiqueta}

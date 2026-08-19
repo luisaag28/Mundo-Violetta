@@ -6,7 +6,6 @@ import { albumDe, resumenDia, hoyLocal } from '@/lib/dia';
 import { NavInferior } from '@/components/NavInferior';
 import { ProgresoMundo } from '@/components/ProgresoMundo';
 import { AlbumMomentos } from '@/components/AlbumMomentos';
-import { Nube } from '@/components/Nube';
 
 export default async function MiMundo() {
   const usuaria = await usuariaActual();
@@ -38,7 +37,6 @@ export default async function MiMundo() {
           className="relative mb-5 overflow-hidden rounded-[var(--radius-card)] p-5 shadow-n2"
           style={{ background: 'linear-gradient(150deg,#A98BE0 0%,#C99AD4 52%,#E890B7 100%)' }}
         >
-          <Nube className="absolute -right-5 -top-7 h-16 w-32 opacity-[0.14]" desde="#FFFFFF" hasta="#FFFFFF" />
           <p className="t-label-alto relative text-white/95">
             MOMENTOS ABIERTOS
           </p>
