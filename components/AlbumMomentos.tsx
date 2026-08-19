@@ -128,7 +128,7 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
                       width={320}
                       height={320}
                       className={`h-full w-full object-cover ${
-                        m.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.28] contrast-[0.6]'
+                        m.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.1] contrast-[0.85]'
                       }`}
                     />
                     {m.veces === 0 && (
@@ -195,7 +195,7 @@ export function AlbumMomentos({ album }: { album: ItemAlbum[] }) {
                   width={480}
                   height={480}
                   className={`h-full w-full object-cover ${
-                    elegido.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.28] contrast-[0.6]'
+                    elegido.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.1] contrast-[0.85]'
                   }`}
                 />
                 {elegido.veces === 0 && (

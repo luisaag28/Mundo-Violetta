@@ -163,7 +163,7 @@ export default async function MiDia({
                     width={320}
                     height={320}
                     className={`h-full w-full object-cover ${
-                      m.abierto ? '' : 'opacity-55 grayscale brightness-[1.28] contrast-[0.6]'
+                      m.abierto ? '' : 'opacity-55 grayscale brightness-[1.1] contrast-[0.85]'
                     }`}
                   />
                   {!m.abierto && (

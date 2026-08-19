@@ -1,5 +1,6 @@
 import { ilustracion } from '@/lib/assets';
 import Image from 'next/image';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { usuariaActual } from '@/lib/auth';
 import { albumDe, resumenDia, hoyLocal } from '@/lib/dia';
@@ -57,6 +58,14 @@ export default async function MiMundo() {
               <p className="t-cuerpo mx-auto mt-2 max-w-[250px] text-tinta-2">
                 Cuando cumpla mis misiones en Mi día, van a ir apareciendo acá.
               </p>
+              <Link
+                href="/mi-dia"
+                className="t-cuerpo-fuerte mt-5 inline-flex h-11 items-center justify-center rounded-[var(--radius-pill)]
+                           bg-gradient-to-r from-rosa to-lav-500 px-6 text-white shadow-n2
+                           transition-transform duration-150 active:scale-[0.975]"
+              >
+                Ir a Mi día
+              </Link>
             </div>
           ) : (
             <AlbumMomentos album={albumConNuevo} />
