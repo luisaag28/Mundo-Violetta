@@ -1,12 +1,15 @@
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Flame, Check, BookOpen } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
 import { resumenSemana, rachaDe, hoyLocal, lunesDe, mapaConstancia, correrDias } from '@/lib/dia';
+import { ilustracion } from '@/lib/assets';
 import { NavInferior } from '@/components/NavInferior';
 import { NumeroQueCuenta } from '@/components/NumeroQueCuenta';
 import { Entrada } from '@/components/Entrada';
 import { MapaConstancia } from '@/components/MapaConstancia';
+import { Nube } from '@/components/Nube';
 
 export default async function MiSemana({
   searchParams,
@@ -27,6 +30,10 @@ export default async function MiSemana({
   const anterior = correrDias(s.lunes, -7);
   const siguiente = correrDias(s.lunes, 7);
   const haySiguiente = siguiente <= semanaActual;
+
+  const celdasPasadas = mapa.flat().filter((c) => !c.futuro);
+  const celdasConDatos = celdasPasadas.filter((c) => c.nivel > 0);
+  const empezandoElMapa = celdasPasadas.length > 0 && celdasConDatos.length / celdasPasadas.length < 0.2;
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
@@ -126,17 +133,28 @@ export default async function MiSemana({
 
         {/* Números */}
         <Entrada delay={0.1} className="mb-3 grid grid-cols-2 gap-3">
-          <div className="rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
-            <p className="t-label-alto flex items-center gap-2 text-durazno-700">
-              <Flame size={14} fill="#8A5A0E" className="text-durazno-700" />
+          <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
+            <div className="absolute -right-3 -top-3 h-14 w-14">
+              <Nube className="absolute inset-0 h-full w-full" />
+              <Image
+                src={ilustracion('avatar-violetta.webp')}
+                alt=""
+                width={160}
+                height={160}
+                className="absolute left-1/2 top-1/2 h-8 w-8 -translate-x-1/2 -translate-y-1/2
+                           rounded-full border-2 border-white object-cover"
+              />
+            </div>
+            <p className="t-label-alto relative flex items-center gap-2 text-durazno-700">
+              <Flame size={14} fill="currentColor" className="text-durazno-700" />
               MI RACHA
             </p>
             <p
-              className="t-heroe tabular mt-2 text-durazno-700"
+              className="t-heroe tabular relative mt-2 text-durazno-700"
             >
               <NumeroQueCuenta valor={racha} />
             </p>
-            <p className="t-label mt-2 text-durazno-700/85">
+            <p className="t-label relative mt-2 text-durazno-700/85">
               {racha === 1 ? 'día seguido' : 'días seguidos'}
             </p>
           </div>
@@ -165,7 +183,16 @@ export default async function MiSemana({
           <p className="t-label mt-1.5 font-semibold text-tinta-2">
             Mientras más lleno el cuadrito, más misiones cumplí ese día.
           </p>
+          {empezandoElMapa && (
+            <p className="t-label mt-1 text-lav-700">
+              Recién estoy empezando a llenar este mapa.
+            </p>
+          )}
 
+          <span className="sr-only">
+            {celdasConDatos.length} de {celdasPasadas.length} días con misiones cumplidas en las
+            últimas 12 semanas.
+          </span>
           <MapaConstancia mapa={mapa} />
 
           <div className="mt-2.5 flex items-center justify-end gap-2">

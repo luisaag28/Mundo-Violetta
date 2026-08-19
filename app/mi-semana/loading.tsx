@@ -17,8 +17,8 @@ export default function Cargando() {
           <div className="h-[104px] animate-pulse rounded-[var(--radius-card)] bg-lav-100/70" />
         </div>
 
-        <div className="mb-3 h-24 animate-pulse rounded-[var(--radius-card)] bg-superficie" />
-        <div className="h-40 animate-pulse rounded-[var(--radius-card)] bg-lav-50" />
+        <div className="mb-3 h-64 animate-pulse rounded-[var(--radius-card)] bg-lav-50" />
+        <div className="h-24 animate-pulse rounded-[var(--radius-card)] bg-superficie" />
       </main>
     </div>
   );
