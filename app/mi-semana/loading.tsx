@@ -10,13 +10,7 @@ export default function Cargando() {
         </div>
 
         <div className="mb-3 h-14 animate-pulse rounded-[var(--radius-card)] bg-lav-100" />
-        <div className="mb-3 h-[104px] animate-pulse rounded-[var(--radius-card)] bg-superficie" />
-
-        <div className="mb-3 grid grid-cols-2 gap-3">
-          <div className="h-[104px] animate-pulse rounded-[var(--radius-card)] bg-lav-100" />
-          <div className="h-[104px] animate-pulse rounded-[var(--radius-card)] bg-lav-100/70" />
-        </div>
-
+        <div className="mb-3 h-56 animate-pulse rounded-[var(--radius-card)] bg-superficie" />
         <div className="mb-3 h-64 animate-pulse rounded-[var(--radius-card)] bg-lav-50" />
         <div className="h-24 animate-pulse rounded-[var(--radius-card)] bg-superficie" />
       </main>

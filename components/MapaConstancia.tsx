@@ -4,27 +4,28 @@ import { motion } from 'motion/react';
 
 type Celda = { fecha: string; nivel: 0 | 1 | 2 | 3; futuro: boolean };
 
-/** El mapa de 12 semanas se dibuja columna por columna al entrar — nunca estático. */
+/** El mapa de 12 semanas se dibuja celda por celda al entrar — nunca estático. */
 export function MapaConstancia({ mapa }: { mapa: Celda[][] }) {
   return (
     <div className="mt-4 flex gap-[3px]" aria-hidden>
       {mapa.map((columna, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.28, delay: 0.2 + i * 0.02, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-1 flex-col gap-[3px]"
-        >
-          {columna.map((celda) => (
-            <span
+        <div key={i} className="flex flex-1 flex-col gap-[3px]">
+          {columna.map((celda, j) => (
+            <motion.span
               key={celda.fecha}
               title={celda.fecha}
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{
+                duration: 0.22,
+                delay: 0.2 + i * 0.018 + j * 0.008,
+                ease: [0.16, 1, 0.3, 1],
+              }}
               className={`aspect-square rounded-[4px] ${
                 celda.futuro
-                  ? 'border border-superficie/70 bg-transparent'
+                  ? 'border border-lav-200/50 bg-transparent'
                   : celda.nivel === 0
-                    ? 'bg-superficie'
+                    ? 'border border-lav-200/40 bg-lav-50'
                     : celda.nivel === 1
                       ? 'bg-lav-200'
                       : celda.nivel === 2
@@ -33,7 +34,7 @@ export function MapaConstancia({ mapa }: { mapa: Celda[][] }) {
               }`}
             />
           ))}
-        </motion.div>
+        </div>
       ))}
     </div>
   );

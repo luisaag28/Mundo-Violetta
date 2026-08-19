@@ -77,7 +77,7 @@ export default async function MiSemana({
           )}
         </Entrada>
 
-        {/* Los 7 días */}
+        {/* Resumen de la semana: los 7 días + los 2 números, como un solo bloque */}
         <Entrada delay={0.05} className="mb-3 rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
           <ul className="flex justify-between">
             {s.dias.map((d) => {
@@ -129,10 +129,10 @@ export default async function MiSemana({
               );
             })}
           </ul>
-        </Entrada>
 
-        {/* Números */}
-        <Entrada delay={0.1} className="mb-3 grid grid-cols-2 gap-3">
+          <div className="my-4 border-t border-lav-100" />
+
+          <div className="grid grid-cols-2 gap-3">
           <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
             <div className="absolute -right-3 -top-3 h-14 w-14">
               <Nube className="absolute inset-0 h-full w-full" />
@@ -170,6 +170,7 @@ export default async function MiSemana({
             </p>
             <p className="t-label mt-2 text-menta-700/85">misiones cumplidas</p>
           </div>
+          </div>
         </Entrada>
 
         {/* Mapa de constancia — 12 semanas de un vistazo. Va primero: es la pieza nueva
@@ -197,7 +198,7 @@ export default async function MiSemana({
 
           <div className="mt-2.5 flex items-center justify-end gap-2">
             <span className="t-label text-tinta-3">Menos</span>
-            <span className="h-3 w-3 rounded-[3px] bg-superficie" />
+            <span className="h-3 w-3 rounded-[3px] border border-lav-200/40 bg-lav-50" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
