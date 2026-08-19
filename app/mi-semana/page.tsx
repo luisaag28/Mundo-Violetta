@@ -98,15 +98,15 @@ export default async function MiSemana({
                           : algo
                             ? 'bg-menta-100 text-menta-700'
                             : d.esFuturo
-                              ? 'border border-lav-200 bg-transparent text-tinta-3'
-                              : 'bg-lav-50 text-tinta-3'
+                              ? 'border border-lav-200/50 bg-transparent text-tinta-3/70'
+                              : 'border border-lav-200/40 bg-lav-50 text-tinta-3'
                       }
                       ${d.esHoy ? 'ring-[3px] ring-lav-500 ring-offset-2 ring-offset-superficie' : ''}`}
                   >
                     {completo ? <Check size={17} strokeWidth={3.4} /> : d.numero}
                   </span>
 
-                  <span className="t-label tabular text-tinta-3">
+                  <span className="t-label tabular text-tinta-2">
                     {tieneDatos ? `${d.hechas}/${d.total}` : '—'}
                   </span>
                 </>
@@ -190,20 +190,20 @@ export default async function MiSemana({
             </p>
           )}
 
+          <div className="mt-2 flex items-center justify-end gap-2">
+            <span className="t-label text-tinta-2">Menos</span>
+            <span className="h-3 w-3 rounded-[3px] border border-lav-200/40 bg-lav-50" />
+            <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
+            <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
+            <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
+            <span className="t-label text-tinta-2">Más</span>
+          </div>
+
           <span className="sr-only">
             {celdasConDatos.length} de {celdasPasadas.length} días con misiones cumplidas en las
             últimas 12 semanas.
           </span>
           <MapaConstancia mapa={mapa} />
-
-          <div className="mt-2.5 flex items-center justify-end gap-2">
-            <span className="t-label text-tinta-3">Menos</span>
-            <span className="h-3 w-3 rounded-[3px] border border-lav-200/40 bg-lav-50" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
-            <span className="t-label text-tinta-3">Más</span>
-          </div>
         </Entrada>
 
         {/* La narrativa, no el porcentaje */}
