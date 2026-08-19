@@ -6,6 +6,7 @@ import { usuariaActual } from '@/lib/auth';
 import { nivelDe, NIVELES, rachaDe, hoyLocal } from '@/lib/dia';
 import { accionSalir } from '../acciones';
 import { NavInferior } from '@/components/NavInferior';
+import { Entrada } from '@/components/Entrada';
 
 export default async function Yo() {
   const usuaria = await usuariaActual();
@@ -41,7 +42,7 @@ export default async function Yo() {
           <p className="t-cuerpo-fuerte mt-1 text-tinta-2">@{usuaria.usuario}</p>
         </header>
 
-        <section className="mb-3 mt-4 rounded-[var(--radius-card)] bg-superficie p-5 shadow-n1">
+        <Entrada className="mb-3 mt-4 rounded-[var(--radius-card)] bg-superficie p-5 shadow-n1">
           <div className="flex items-center gap-3">
             <span className="flex h-11 w-11 flex-none items-center justify-center
                              rounded-[var(--radius-inner)] bg-durazno-100">
@@ -57,9 +58,9 @@ export default async function Yo() {
             </div>
           </div>
 
-          <div className="mt-4 h-3 overflow-hidden rounded-lg bg-lav-50">
+          <div className="mt-4 h-3 overflow-hidden rounded-[var(--radius-chip)] bg-lav-50">
             <span
-              className="block h-full rounded-lg bg-gradient-to-r from-rosa to-lav-500
+              className="block h-full rounded-[var(--radius-chip)] bg-gradient-to-r from-rosa to-lav-500
                          transition-[width] duration-700 ease-[var(--ease-suave)]"
               style={{ width: `${Math.max(4, avance)}%` }}
             />
@@ -70,10 +71,10 @@ export default async function Yo() {
               ? `Me ${faltan === 1 ? 'falta 1 misión' : `faltan ${faltan} misiones`} para ser ${siguiente.titulo}.`
               : '¡Llegué al último nivel! Sigo construyendo mis hábitos.'}
           </p>
-        </section>
+        </Entrada>
 
         {/* Escalera de niveles: dónde está y qué viene */}
-        <section className="mb-3 rounded-[var(--radius-card)] bg-superficie p-5 shadow-n1">
+        <Entrada delay={0.05} className="mb-3 rounded-[var(--radius-card)] bg-superficie p-5 shadow-n1">
           <h2
             className="t-seccion mb-3 text-tinta"
           >
@@ -102,12 +103,12 @@ export default async function Yo() {
                   <span className="min-w-0 flex-1">
                     <span
                       className={`t-cuerpo-fuerte block ${
-                        alcanzado ? 'text-tinta' : 'text-tinta-3'
+                        alcanzado ? 'text-tinta' : 'text-tinta-2'
                       }`}
                     >
                       {nv.titulo}
                     </span>
-                    <span className="t-label text-tinta-3">
+                    <span className="t-label text-tinta-2">
                       {nv.desde === 0 ? 'Desde el primer día' : `${nv.desde} misiones cumplidas`}
                     </span>
                   </span>
@@ -122,9 +123,9 @@ export default async function Yo() {
               );
             })}
           </ol>
-        </section>
+        </Entrada>
 
-        <section className="mb-3 grid grid-cols-2 gap-3">
+        <Entrada delay={0.1} className="mb-3 grid grid-cols-2 gap-3">
           <div className="rounded-[var(--radius-card)] bg-menta-100 p-4 shadow-n1">
             <p className="t-label-alto text-menta-700">
               EN TOTAL
@@ -150,15 +151,15 @@ export default async function Yo() {
               {racha === 1 ? 'día seguido' : 'días seguidos'}
             </p>
           </div>
-        </section>
+        </Entrada>
 
-        <section className="mb-4 flex items-start gap-3 rounded-[var(--radius-card)]
+        <Entrada delay={0.15} className="mb-4 flex items-start gap-3 rounded-[var(--radius-card)]
                             bg-lav-50 p-4">
           <ShieldCheck size={20} className="mt-0.5 flex-none text-lav-700" />
           <p className="t-label font-semibold text-tinta-2">
             Mi progreso se guarda en la nube y mi contraseña está cifrada. Puedo entrar desde cualquier teléfono.
           </p>
-        </section>
+        </Entrada>
 
         <form action={accionSalir}>
           <button
