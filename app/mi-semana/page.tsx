@@ -6,6 +6,7 @@ import { resumenSemana, rachaDe, hoyLocal, lunesDe, mapaConstancia, correrDias }
 import { NavInferior } from '@/components/NavInferior';
 import { NumeroQueCuenta } from '@/components/NumeroQueCuenta';
 import { Entrada } from '@/components/Entrada';
+import { MapaConstancia } from '@/components/MapaConstancia';
 
 export default async function MiSemana({
   searchParams,
@@ -90,7 +91,7 @@ export default async function MiSemana({
                           : algo
                             ? 'bg-menta-100 text-menta-700'
                             : d.esFuturo
-                              ? 'bg-hundido text-tinta-3'
+                              ? 'border border-lav-200 bg-transparent text-tinta-3'
                               : 'bg-lav-50 text-tinta-3'
                       }
                       ${d.esHoy ? 'ring-[3px] ring-lav-500 ring-offset-2 ring-offset-superficie' : ''}`}
@@ -140,21 +141,45 @@ export default async function MiSemana({
             </p>
           </div>
 
-          <div className="rounded-[var(--radius-card)] bg-cielo-100 p-4 shadow-n1">
-            <p className="t-label-alto text-cielo-700">
+          <div className="rounded-[var(--radius-card)] bg-menta-100 p-4 shadow-n1">
+            <p className="t-label-alto text-menta-700">
               ESTA SEMANA
             </p>
             <p
-              className="t-heroe tabular mt-2 text-cielo-700"
+              className="t-heroe tabular mt-2 text-menta-700"
             >
               <NumeroQueCuenta valor={s.totalHechas} />
             </p>
-            <p className="t-label mt-2 text-cielo-700/85">misiones cumplidas</p>
+            <p className="t-label mt-2 text-menta-700/85">misiones cumplidas</p>
+          </div>
+        </Entrada>
+
+        {/* Mapa de constancia — 12 semanas de un vistazo. Va primero: es la pieza nueva
+            más importante y necesita caber con su leyenda cerca del viewport inicial. */}
+        <Entrada delay={0.15} className="mb-3 rounded-[var(--radius-card)] bg-hundido p-4">
+          <h2
+            className="t-seccion text-tinta"
+          >
+            Mis últimas 12 semanas
+          </h2>
+          <p className="t-label mt-1.5 font-semibold text-tinta-2">
+            Mientras más lleno el cuadrito, más misiones cumplí ese día.
+          </p>
+
+          <MapaConstancia mapa={mapa} />
+
+          <div className="mt-2.5 flex items-center justify-end gap-2">
+            <span className="t-label text-tinta-3">Menos</span>
+            <span className="h-3 w-3 rounded-[3px] bg-superficie" />
+            <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
+            <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
+            <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
+            <span className="t-label text-tinta-3">Más</span>
           </div>
         </Entrada>
 
         {/* La narrativa, no el porcentaje */}
-        <Entrada delay={0.15} className="mb-3 overflow-hidden rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
+        <Entrada delay={0.2} className="overflow-hidden rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
           <p className="t-label-alto flex items-center gap-2 text-tinta">
             <span className="flex h-8 w-8 flex-none items-center justify-center rounded-full bg-lav-100 text-lav-700">
               <BookOpen size={16} strokeWidth={2.4} />
@@ -172,51 +197,6 @@ export default async function MiSemana({
               aquí voy a ver lo que fui construyendo.
             </p>
           )}
-        </Entrada>
-
-        {/* Mapa de constancia — 12 semanas de un vistazo */}
-        <Entrada delay={0.2} className="rounded-[var(--radius-card)] bg-hundido p-4">
-          <h2
-            className="t-seccion text-tinta"
-          >
-            Mis últimas 12 semanas
-          </h2>
-          <p className="t-label mt-2 font-semibold text-tinta-2">
-            Mientras más lleno el cuadrito, más misiones cumplí ese día.
-          </p>
-
-          <div className="mt-4 flex gap-[5px]" aria-hidden>
-            {mapa.map((columna, i) => (
-              <div key={i} className="flex flex-1 flex-col gap-[5px]">
-                {columna.map((celda) => (
-                  <span
-                    key={celda.fecha}
-                    title={celda.fecha}
-                    className={`aspect-square rounded-[4px] ${
-                      celda.futuro
-                        ? 'bg-superficie/60'
-                        : celda.nivel === 0
-                          ? 'bg-superficie'
-                          : celda.nivel === 1
-                            ? 'bg-lav-200'
-                            : celda.nivel === 2
-                              ? 'bg-lav-300'
-                              : 'bg-lav-500'
-                    }`}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-3 flex items-center justify-end gap-2">
-            <span className="t-label text-tinta-3">Menos</span>
-            <span className="h-3 w-3 rounded-[3px] bg-superficie" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
-            <span className="t-label text-tinta-3">Más</span>
-          </div>
         </Entrada>
       </main>
 
