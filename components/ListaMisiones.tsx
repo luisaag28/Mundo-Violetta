@@ -231,7 +231,7 @@ export function ListaMisiones({
                           ? 'border-menta bg-menta'
                           : esSiguiente
                             ? 'border-white/80 bg-white/15'
-                            : 'border-lav-300 bg-lav-50'
+                            : 'border-lav-500 bg-lav-100'
                       }`}
                   >
                     {m.completado && <Check size={15} strokeWidth={3.6} className="text-white" />}

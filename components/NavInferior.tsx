@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Home, Sparkles, TrendingUp, User } from 'lucide-react';
+import { motion } from 'motion/react';
 
 const DESTINOS = [
   { href: '/mi-dia', etiqueta: 'Mi día', Icono: Home },
@@ -30,10 +31,14 @@ export function NavInferior() {
                 className="flex min-w-[70px] flex-col items-center gap-1 rounded-[var(--radius-inner)]
                            py-1 transition-transform duration-150 active:scale-95"
               >
-                <span
-                  className={`flex h-8 w-13 items-center justify-center rounded-2xl px-4
-                    ${activo ? 'bg-lav-100' : ''}`}
-                >
+                <span className="relative flex h-8 w-13 items-center justify-center rounded-2xl px-4">
+                  {activo && (
+                    <motion.span
+                      layoutId="nav-pill"
+                      className="absolute inset-0 -z-10 rounded-2xl bg-lav-100"
+                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                    />
+                  )}
                   <Icono
                     size={22}
                     strokeWidth={activo ? 2.4 : 2.1}

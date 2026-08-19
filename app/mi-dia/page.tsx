@@ -37,7 +37,7 @@ export default async function MiDia({
 
   const faltan = dia.total - dia.hechas;
   const porcentaje = dia.total > 0 ? Math.round((dia.hechas / dia.total) * 100) : 0;
-  const tira = dia.momentos.slice(0, 4);
+  const tira = dia.momentos.slice(0, 3);
   const resto = Math.max(0, dia.momentos.length - tira.length);
 
   return (
@@ -133,7 +133,7 @@ export default async function MiDia({
         {dia.momentos.length > 0 && (
           <Link
             href="/mi-mundo"
-            className="mb-5 block overflow-hidden rounded-[var(--radius-card)] p-4 shadow-n2
+            className="mb-4 block overflow-hidden rounded-[var(--radius-card)] p-4 shadow-n2
                        transition-transform duration-150 active:scale-[0.985]"
             style={{
               background: 'linear-gradient(168deg,#DCEEFB 0%,#EBE1FA 48%,#FCE7DB 100%)',
@@ -153,11 +153,11 @@ export default async function MiDia({
               </span>
             </div>
 
-            <div className="grid grid-cols-5 gap-2">
+            <div className="flex items-center gap-2">
               {tira.map((m, i) => (
                 <div
                   key={`${m.ilustracion}-${i}`}
-                  className="relative aspect-square overflow-hidden rounded-[var(--radius-inner)]
+                  className="relative h-12 w-12 flex-none overflow-hidden rounded-[var(--radius-inner)]
                              bg-white shadow-n1"
                 >
                   <Image
@@ -171,18 +171,18 @@ export default async function MiDia({
                   />
                   {!m.abierto && (
                     <span className="absolute inset-0 flex items-center justify-center">
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full bg-tinta/45">
-                        <Lock size={16} className="text-white" strokeWidth={2.4} />
+                      <span className="flex h-6 w-6 items-center justify-center rounded-full bg-tinta/45">
+                        <Lock size={13} className="text-white" strokeWidth={2.4} />
                       </span>
                     </span>
                   )}
                   {m.nuevo && (
                     <span
-                      className="absolute -left-1 -top-1 flex h-7 w-7 -rotate-12 items-center
+                      className="absolute -left-1 -top-1 flex h-5 w-5 -rotate-12 items-center
                                  justify-center rounded-full border-2 border-white bg-menta shadow-n1"
                       title="Lo abrí hoy"
                     >
-                      <Sparkles size={14} className="text-white" fill="#fff" />
+                      <Sparkles size={11} className="text-white" fill="#fff" />
                     </span>
                   )}
                 </div>
@@ -190,8 +190,8 @@ export default async function MiDia({
 
               {resto > 0 && (
                 <div
-                  className="t-seccion flex aspect-square items-center justify-center rounded-[var(--radius-inner)]
-                             bg-white/75 text-lav-700"
+                  className="t-cuerpo-fuerte flex h-12 w-12 flex-none items-center justify-center
+                             rounded-[var(--radius-inner)] bg-white/75 text-lav-700"
                 >
                   +{resto}
                 </div>
@@ -200,26 +200,28 @@ export default async function MiDia({
           </Link>
         )}
 
-        {/* ── Misiones ── */}
-        <h2 className="t-label-alto mb-3 uppercase text-tinta-2">Mis misiones de hoy</h2>
+        {/* ── Misiones: panel hundido — el 3er nivel de profundidad de la ficha ── */}
+        <section className="rounded-[var(--radius-card)] bg-lav-50 p-3">
+          <h2 className="t-label-alto mb-3 px-1 uppercase text-tinta-2">Mis misiones de hoy</h2>
 
-        {dia.total === 0 ? (
-          <div className="rounded-[var(--radius-card)] bg-superficie p-7 text-center shadow-n1">
-            <Image
-              src={ilustracion('habito-peluche.webp')}
-              alt=""
-              width={320}
-              height={320}
-              className="mx-auto mb-4 h-28 w-28 rounded-[var(--radius-card)] object-cover"
-            />
-            <p className="t-seccion text-tinta">Hoy es un día libre</p>
-            <p className="t-cuerpo mx-auto mt-2 max-w-[250px] text-tinta-2">
-              Hoy no tengo misiones programadas. A descansar.
-            </p>
-          </div>
-        ) : (
-          <ListaMisiones misiones={dia.misiones} fecha={fecha} soloLectura={!esHoy} />
-        )}
+          {dia.total === 0 ? (
+            <div className="rounded-[var(--radius-card)] bg-superficie p-7 text-center shadow-n1">
+              <Image
+                src={ilustracion('habito-peluche.webp')}
+                alt=""
+                width={320}
+                height={320}
+                className="mx-auto mb-4 h-28 w-28 rounded-[var(--radius-card)] object-cover"
+              />
+              <p className="t-cuerpo-fuerte text-tinta">Hoy es un día libre</p>
+              <p className="t-cuerpo mx-auto mt-2 max-w-[250px] text-tinta-2">
+                Hoy no tengo misiones programadas. A descansar.
+              </p>
+            </div>
+          ) : (
+            <ListaMisiones misiones={dia.misiones} fecha={fecha} soloLectura={!esHoy} />
+          )}
+        </section>
 
         {/* ── Racha ── */}
         <section className="mt-4 grid grid-cols-2 gap-3">
@@ -241,7 +243,7 @@ export default async function MiDia({
           <div className="rounded-[var(--radius-card)] bg-menta-100 p-4 shadow-n1">
             <p className="t-label-alto text-menta-700">MI NIVEL</p>
             <p
-              className="t-seccion mt-2 text-menta-700"
+              className="t-cuerpo-fuerte mt-2 text-menta-700"
             >
               {nivel.titulo}
             </p>
