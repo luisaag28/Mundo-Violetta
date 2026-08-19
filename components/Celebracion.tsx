@@ -144,7 +144,7 @@ export function Celebracion(props: DatosCelebracion) {
             <button
               type="button"
               onClick={() => setFiesta(null)}
-              className="t-seccion mt-5 flex h-13 w-full items-center justify-center rounded-[var(--radius-pill)]
+              className="t-cuerpo-fuerte mt-5 flex h-13 w-full items-center justify-center rounded-[var(--radius-pill)]
                          bg-gradient-to-r from-rosa to-lav-500 py-3.5
                          text-white shadow-n2 transition-transform duration-150 active:scale-[0.975]"
             >

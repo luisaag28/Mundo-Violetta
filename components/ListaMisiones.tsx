@@ -22,7 +22,7 @@ function Vasos({
   claro: boolean;
 }) {
   return (
-    <span className="mt-1 flex items-center gap-2">
+    <span className="mt-1 flex flex-col gap-1">
       <span className="flex gap-2">
         {Array.from({ length: meta }).map((_, i) => (
           <span
@@ -42,7 +42,7 @@ function Vasos({
       <span
         className={`t-label whitespace-nowrap ${claro ? 'text-white/90' : 'text-tinta-2'}`}
       >
-        {avance}/{meta} vasos
+        {avance} de {meta} vasos
       </span>
     </span>
   );
@@ -78,7 +78,12 @@ export function ListaMisiones({
   );
 
   function alternar(m: Mision, delta = 1) {
-    if (soloLectura || enVuelo === m.id) return;
+    if (soloLectura) {
+      setAviso('Los días pasados ya quedaron guardados, no se pueden cambiar.');
+      setTimeout(() => setAviso(null), 2600);
+      return;
+    }
+    if (enVuelo === m.id) return;
     if (m.tipo === 'vasos') {
       if (delta > 0 && m.avance >= m.meta) return;
       if (delta < 0 && m.avance <= 0) return;

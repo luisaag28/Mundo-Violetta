@@ -94,7 +94,7 @@ export default async function MiDia({
                 </Link>
               )}
             </div>
-            <h1 className="t-pagina line-clamp-2 text-tinta">
+            <h1 className="t-cuerpo-fuerte line-clamp-2 text-tinta">
               {esHoy ? 'Mi día' : dia.etiquetaFecha}
             </h1>
           </div>
