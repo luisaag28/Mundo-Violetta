@@ -66,7 +66,17 @@ export default async function MiSemana({
             <ChevronLeft size={22} strokeWidth={2.6} />
           </Link>
 
-          <p className="t-cuerpo-fuerte text-center text-tinta">{s.etiqueta}</p>
+          <div className="flex flex-1 flex-col items-center gap-0.5">
+            <p className="t-cuerpo-fuerte text-center text-tinta">{s.etiqueta}</p>
+            {s.lunes !== semanaActual && (
+              <Link
+                href="/mi-semana"
+                className="t-label text-lav-700 transition-transform active:scale-95"
+              >
+                Ir a hoy
+              </Link>
+            )}
+          </div>
 
           {haySiguiente ? (
             <Link
@@ -112,7 +122,7 @@ export default async function MiSemana({
                               ? 'border border-lav-200/50 bg-transparent text-tinta-3/70'
                               : 'border border-lav-200/40 bg-superficie text-tinta-3'
                       }
-                      ${d.esHoy ? 'ring-[3px] ring-lav-500 ring-offset-1 ring-offset-superficie' : ''}`}
+                      ${d.esHoy ? 'ring-[2.5px] ring-lav-500' : ''}`}
                   >
                     {completo ? <Check size={17} strokeWidth={3.4} /> : d.numero}
                   </span>
@@ -146,7 +156,7 @@ export default async function MiSemana({
           <div className="grid grid-cols-2 gap-3">
           <div className="relative overflow-hidden rounded-[var(--radius-card)] bg-durazno-100 p-4 shadow-n1">
             <div className="absolute -right-3 -top-3 h-14 w-14">
-              <Nube className="absolute inset-0 h-full w-full" />
+              <Nube className="absolute inset-0 h-full w-full" desde="#FFFFFF" hasta="#FFFFFF" />
               <Image
                 src={ilustracion('avatar-violetta.webp')}
                 alt=""
