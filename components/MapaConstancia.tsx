@@ -7,9 +7,9 @@ type Celda = { fecha: string; nivel: 0 | 1 | 2 | 3; futuro: boolean };
 /** El mapa de 12 semanas se dibuja celda por celda al entrar — nunca estático. */
 export function MapaConstancia({ mapa }: { mapa: Celda[][] }) {
   return (
-    <div className="mt-4 flex gap-[3px]" aria-hidden>
+    <div className="mt-3 flex gap-[2px]" aria-hidden>
       {mapa.map((columna, i) => (
-        <div key={i} className="flex flex-1 flex-col gap-[3px]">
+        <div key={i} className="flex flex-1 flex-col gap-[2px]">
           {columna.map((celda, j) => (
             <motion.span
               key={celda.fecha}

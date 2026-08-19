@@ -111,7 +111,7 @@ export default async function MiSemana({
                   <span className="t-label-alto text-tinta-2">{d.inicial}</span>
 
                   <span
-                    className={`t-label-alto flex h-10 w-10 items-center justify-center rounded-[var(--radius-chip)]
+                    className={`t-label-alto flex h-11 w-11 items-center justify-center rounded-[var(--radius-chip)]
                                 transition-colors
                       ${
                         completo
@@ -196,7 +196,7 @@ export default async function MiSemana({
 
         {/* Mapa de constancia — 12 semanas de un vistazo. Va primero: es la pieza nueva
             más importante y necesita caber con su leyenda cerca del viewport inicial. */}
-        <Entrada delay={0.15} className="mb-3 rounded-[var(--radius-card)] bg-hundido p-4">
+        <Entrada delay={0.15} className="mb-3 rounded-[var(--radius-card)] bg-hundido p-3">
           <h2
             className="t-seccion text-tinta"
           >
@@ -213,10 +213,10 @@ export default async function MiSemana({
 
           <div className="mt-2 flex items-center justify-end gap-2">
             <span className="t-label text-tinta-2">Menos</span>
-            <span className="h-3 w-3 rounded-[3px] border border-lav-200/40 bg-superficie" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
-            <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
+            <span className="h-3 w-3 rounded-[4px] border border-lav-200/40 bg-superficie" />
+            <span className="h-3 w-3 rounded-[4px] bg-lav-200" />
+            <span className="h-3 w-3 rounded-[4px] bg-lav-300" />
+            <span className="h-3 w-3 rounded-[4px] bg-lav-500" />
             <span className="t-label text-tinta-2">Más</span>
           </div>
 
