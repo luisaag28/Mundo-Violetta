@@ -31,6 +31,11 @@ export default async function MiSemana({
   const siguiente = correrDias(s.lunes, 7);
   const haySiguiente = siguiente <= semanaActual;
 
+  const narrativaTexto =
+    s.narrativa.length > 1
+      ? `${s.narrativa.slice(0, -1).join(', ')} y ${s.narrativa[s.narrativa.length - 1]}`
+      : (s.narrativa[0] ?? '');
+
   const celdasPasadas = mapa.flat().filter((c) => !c.futuro);
   const celdasConDatos = celdasPasadas.filter((c) => c.nivel > 0);
   const empezandoElMapa = celdasPasadas.length > 0 && celdasConDatos.length / celdasPasadas.length < 0.2;
@@ -73,7 +78,12 @@ export default async function MiSemana({
               <ChevronRight size={22} strokeWidth={2.6} />
             </Link>
           ) : (
-            <span className="h-11 w-11 flex-none" aria-hidden />
+            <span
+              aria-hidden
+              className="flex h-11 w-11 flex-none items-center justify-center text-lav-700/30"
+            >
+              <ChevronRight size={22} strokeWidth={2.6} />
+            </span>
           )}
         </Entrada>
 
@@ -101,7 +111,7 @@ export default async function MiSemana({
                               ? 'border border-lav-200/50 bg-transparent text-tinta-3/70'
                               : 'border border-lav-200/40 bg-lav-50 text-tinta-3'
                       }
-                      ${d.esHoy ? 'ring-[3px] ring-lav-500 ring-offset-2 ring-offset-superficie' : ''}`}
+                      ${d.esHoy ? 'ring-[3px] ring-lav-500 ring-offset-1 ring-offset-superficie' : ''}`}
                   >
                     {completo ? <Check size={17} strokeWidth={3.4} /> : d.numero}
                   </span>
@@ -192,7 +202,7 @@ export default async function MiSemana({
 
           <div className="mt-2 flex items-center justify-end gap-2">
             <span className="t-label text-tinta-2">Menos</span>
-            <span className="h-3 w-3 rounded-[3px] border border-lav-200/40 bg-lav-50" />
+            <span className="h-3 w-3 rounded-[3px] border border-lav-200/40 bg-superficie" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-200" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-300" />
             <span className="h-3 w-3 rounded-[3px] bg-lav-500" />
@@ -217,7 +227,7 @@ export default async function MiSemana({
 
           {s.narrativa.length > 0 ? (
             <p className="t-cuerpo mt-2.5 text-tinta-2">
-              Esta semana {s.narrativa.join(', ')}. Cada semana estoy construyendo hábitos más fuertes.
+              Esta semana {narrativaTexto}. Cada semana estoy construyendo hábitos más fuertes.
             </p>
           ) : (
             <p className="t-cuerpo mt-2.5 text-tinta-2">

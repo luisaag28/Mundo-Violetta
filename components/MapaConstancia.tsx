@@ -25,7 +25,7 @@ export function MapaConstancia({ mapa }: { mapa: Celda[][] }) {
                 celda.futuro
                   ? 'border border-lav-200/50 bg-transparent'
                   : celda.nivel === 0
-                    ? 'border border-lav-200/40 bg-lav-50'
+                    ? 'border border-lav-200/40 bg-superficie'
                     : celda.nivel === 1
                       ? 'bg-lav-200'
                       : celda.nivel === 2
