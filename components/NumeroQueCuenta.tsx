@@ -12,7 +12,7 @@ export function NumeroQueCuenta({
   duracion?: number;
   className?: string;
 }) {
-  const [n, setN] = useState(valor);
+  const [n, setN] = useState(0);
   const previo = useRef<number | null>(null);
 
   useEffect(() => {

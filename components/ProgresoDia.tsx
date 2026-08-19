@@ -8,7 +8,7 @@ import { useEffect, useRef, useState } from 'react';
  * animaba solo y la frase ya mostraba el total final, un instante desincronizados).
  */
 export function ProgresoDia({ hechas, total }: { hechas: number; total: number }) {
-  const [n, setN] = useState(hechas);
+  const [n, setN] = useState(0);
   const previo = useRef<number | null>(null);
 
   useEffect(() => {

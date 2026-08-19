@@ -45,7 +45,7 @@ export default async function MiMundo() {
           <ProgresoMundo abiertos={abiertos} total={album.length} />
         </section>
 
-        <section className="rounded-[var(--radius-card)] bg-lav-50 p-2">
+        <section className="rounded-[var(--radius-card)] bg-lav-50 p-3">
           {album.length === 0 ? (
             <div className="rounded-[var(--radius-card)] bg-superficie p-7 text-center shadow-n1">
               <Image

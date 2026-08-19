@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 
 /** Mismo patrón que ProgresoDia: el número y la frase animan juntos, nunca desincronizados. */
 export function ProgresoMundo({ abiertos, total }: { abiertos: number; total: number }) {
-  const [n, setN] = useState(abiertos);
+  const [n, setN] = useState(0);
   const previo = useRef<number | null>(null);
 
   useEffect(() => {
