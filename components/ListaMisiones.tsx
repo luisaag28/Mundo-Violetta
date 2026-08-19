@@ -6,7 +6,7 @@ import { ilustracion } from '@/lib/assets';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
-import { Check, Undo2, AlertCircle, Minus, Plus } from 'lucide-react';
+import { Check, Undo2, AlertCircle, Minus, Plus, GlassWater } from 'lucide-react';
 import type { Mision } from '@/lib/dia';
 import { accionAlternarMision } from '@/app/acciones';
 import { MiniConfeti } from './MiniConfeti';
@@ -23,19 +23,22 @@ function Vasos({
 }) {
   return (
     <span className="mt-1 flex flex-col gap-1">
-      <span className="flex gap-2">
+      <span className="flex gap-2.5">
         {Array.from({ length: meta }).map((_, i) => (
-          <span
+          <GlassWater
             key={i}
-            className={`h-5 w-3.5 rounded-[var(--radius-chip)] border-2 transition-colors duration-300 ${
+            size={24}
+            strokeWidth={2.2}
+            className={
               i < avance
                 ? claro
-                  ? 'border-white bg-white'
-                  : 'border-cielo bg-cielo'
+                  ? 'text-white'
+                  : 'text-cielo'
                 : claro
-                  ? 'border-white/60 bg-white/20'
-                  : 'border-cielo/40 bg-white/70'
-            }`}
+                  ? 'text-white/45'
+                  : 'text-lav-200'
+            }
+            fill={i < avance ? (claro ? '#FFFFFF' : '#8FCDEE') : 'none'}
           />
         ))}
       </span>
@@ -197,8 +200,8 @@ export function ListaMisiones({
                       disabled={soloLectura || enVuelo === m.id}
                       onClick={() => alternar(m, -1)}
                       aria-label="Quitar un vaso"
-                      className={`flex h-9 w-9 flex-none items-center justify-center rounded-full
-                                  border-[2.5px] transition-transform active:scale-90
+                      className={`flex h-11 w-11 flex-none items-center justify-center rounded-full
+                                  border-[2.5px] opacity-80 transition-transform active:scale-90
                         ${
                           esSiguiente
                             ? 'border-white/70 bg-white/15 text-white'

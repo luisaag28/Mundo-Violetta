@@ -48,7 +48,7 @@ export function NavInferior() {
                 </span>
                 <span
                   className={`t-label ${
-                    activo ? 'text-lav-700' : 'text-tinta-3'
+                    activo ? 'text-lav-700' : 'text-tinta-2'
                   }`}
                 >
                   {etiqueta}

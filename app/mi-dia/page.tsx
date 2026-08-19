@@ -73,7 +73,7 @@ export default async function MiDia({
               <Link
                 href={`/mi-dia?fecha=${anterior}`}
                 aria-label="Ver el día anterior"
-                className="-ml-1.5 flex h-7 w-7 flex-none items-center justify-center rounded-full
+                className="-ml-2.5 flex h-11 w-11 flex-none items-center justify-center rounded-full
                            text-tinta-2 transition-transform active:scale-90"
               >
                 <ChevronLeft size={18} strokeWidth={2.8} />
@@ -87,7 +87,7 @@ export default async function MiDia({
                 <Link
                   href={`/mi-dia?fecha=${siguiente}`}
                   aria-label="Ver el día siguiente"
-                  className="flex h-7 w-7 flex-none items-center justify-center rounded-full
+                  className="-mr-2.5 flex h-11 w-11 flex-none items-center justify-center rounded-full
                              text-tinta-2 transition-transform active:scale-90"
                 >
                   <ChevronRight size={18} strokeWidth={2.8} />
