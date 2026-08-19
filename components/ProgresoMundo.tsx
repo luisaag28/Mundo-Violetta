@@ -47,7 +47,7 @@ export function ProgresoMundo({ abiertos, total }: { abiertos: number; total: nu
       <p className="t-cuerpo-fuerte relative mt-2 text-white">
         {n === total
           ? '¡Abrí mi mundo entero!'
-          : 'Los que faltan se abren cuando los cumpla por primera vez.'}
+          : 'Los que faltan se abren cuando yo las cumpla por primera vez.'}
       </p>
     </>
   );

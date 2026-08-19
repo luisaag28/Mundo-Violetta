@@ -1,19 +1,24 @@
-import Image from 'next/image';
 import { ilustracion } from '@/lib/assets';
+import Image from 'next/image';
 import { redirect } from 'next/navigation';
-import { Lock } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
-import { albumDe } from '@/lib/dia';
+import { albumDe, resumenDia, hoyLocal } from '@/lib/dia';
 import { NavInferior } from '@/components/NavInferior';
 import { ProgresoMundo } from '@/components/ProgresoMundo';
+import { AlbumMomentos } from '@/components/AlbumMomentos';
 import { Nube } from '@/components/Nube';
 
 export default async function MiMundo() {
   const usuaria = await usuariaActual();
   if (!usuaria) redirect('/entrar');
 
-  const album = await albumDe(usuaria.id);
+  const [album, dia] = await Promise.all([
+    albumDe(usuaria.id),
+    resumenDia(usuaria.id, hoyLocal()),
+  ]);
   const abiertos = album.filter((m) => m.veces > 0).length;
+  const nuevosHoy = new Set(dia.momentos.filter((m) => m.nuevo).map((m) => m.titulo));
+  const albumConNuevo = album.map((m) => ({ ...m, nuevo: nuevosHoy.has(m.titulo) }));
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
@@ -40,50 +45,25 @@ export default async function MiMundo() {
           <ProgresoMundo abiertos={abiertos} total={album.length} />
         </section>
 
-        <ul className="grid grid-cols-2 gap-3">
-          {album.map((m) => (
-            <li
-              key={m.titulo}
-              className="overflow-hidden rounded-[var(--radius-card)] bg-superficie shadow-n1"
-            >
-              <div className="relative aspect-square">
-                <Image
-                  src={ilustracion(m.ilustracion)}
-                  alt={m.titulo}
-                  width={320}
-                  height={320}
-                  className={`h-full w-full object-cover ${
-                    m.veces > 0 ? '' : 'opacity-55 grayscale brightness-[1.28] contrast-[0.6]'
-                  }`}
-                />
-                {m.veces === 0 && (
-                  <span className="absolute inset-0 flex items-center justify-center">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-full bg-tinta/45">
-                      <Lock size={22} className="text-white" strokeWidth={2.4} />
-                    </span>
-                  </span>
-                )}
-                {m.veces > 0 && (
-                  <span className="t-label-alto tabular absolute bottom-2 right-2 rounded-[10px] bg-white/92
-                                   px-2 py-1 text-lav-700 shadow-n1">
-                    ×{m.veces}
-                  </span>
-                )}
-              </div>
-
-              <div className="p-3">
-                <p className="t-cuerpo-fuerte text-tinta">{m.titulo}</p>
-                <p className="t-label mt-1 text-tinta-2">
-                  {m.veces === 0
-                    ? 'Todavía por abrir'
-                    : m.veces === 1
-                      ? 'Lo hice 1 vez'
-                      : `Lo hice ${m.veces} veces`}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <section className="rounded-[var(--radius-card)] bg-lav-50 p-2">
+          {album.length === 0 ? (
+            <div className="rounded-[var(--radius-card)] bg-superficie p-7 text-center shadow-n1">
+              <Image
+                src={ilustracion('habito-peluche.webp')}
+                alt=""
+                width={320}
+                height={320}
+                className="mx-auto mb-4 h-28 w-28 rounded-[var(--radius-card)] object-cover"
+              />
+              <p className="t-cuerpo-fuerte text-tinta">Todavía no tengo momentos</p>
+              <p className="t-cuerpo mx-auto mt-2 max-w-[250px] text-tinta-2">
+                Cuando cumpla mis misiones en Mi día, van a ir apareciendo acá.
+              </p>
+            </div>
+          ) : (
+            <AlbumMomentos album={albumConNuevo} />
+          )}
+        </section>
       </main>
 
       <NavInferior />
