@@ -40,9 +40,9 @@ function Vasos({
         ))}
       </span>
       <span
-        className={`t-label ${claro ? 'text-white/90' : 'text-tinta-2'}`}
+        className={`t-label whitespace-nowrap ${claro ? 'text-white/90' : 'text-tinta-2'}`}
       >
-        {avance} de {meta} vasos
+        {avance}/{meta} vasos
       </span>
     </span>
   );
