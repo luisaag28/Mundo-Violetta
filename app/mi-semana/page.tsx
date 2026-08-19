@@ -89,6 +89,7 @@ export default async function MiSemana({
 
         {/* Resumen de la semana: los 7 días + los 2 números, como un solo bloque */}
         <Entrada delay={0.05} className="mb-3 rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
+          <p className="t-label-alto mb-3 uppercase text-tinta-2">Misiones cumplidas por día</p>
           <ul className="flex justify-between">
             {s.dias.map((d) => {
               const completo = d.total > 0 && d.hechas === d.total;
@@ -109,7 +110,7 @@ export default async function MiSemana({
                             ? 'bg-menta-100 text-menta-700'
                             : d.esFuturo
                               ? 'border border-lav-200/50 bg-transparent text-tinta-3/70'
-                              : 'border border-lav-200/40 bg-lav-50 text-tinta-3'
+                              : 'border border-lav-200/40 bg-superficie text-tinta-3'
                       }
                       ${d.esHoy ? 'ring-[3px] ring-lav-500 ring-offset-1 ring-offset-superficie' : ''}`}
                   >
