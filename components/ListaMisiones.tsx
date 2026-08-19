@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Check, Undo2, AlertCircle, Minus, Plus } from 'lucide-react';
 import type { Mision } from '@/lib/dia';
 import { accionAlternarMision } from '@/app/acciones';
+import { MiniConfeti } from './MiniConfeti';
+import { reproducirLogro } from '@/lib/sonido';
 
 function Vasos({
   avance,
@@ -58,6 +60,7 @@ export function ListaMisiones({
   const router = useRouter();
   const [, empezar] = useTransition();
   const [enVuelo, setEnVuelo] = useState<number | null>(null);
+  const [celebrando, setCelebrando] = useState<number | null>(null);
   const [aviso, setAviso] = useState<string | null>(null);
   const [error, setError] = useState<{ texto: string; accion?: 'entrar' | 'recargar' } | null>(null);
 
@@ -94,6 +97,11 @@ export function ListaMisiones({
       if (!r.ok) {
         setError({ texto: r.error, accion: r.accion });
         return;
+      }
+      if (!estabaHecha && r.completado) {
+        setCelebrando(m.id);
+        reproducirLogro();
+        setTimeout(() => setCelebrando((actual) => (actual === m.id ? null : actual)), 650);
       }
       if (m.tipo !== 'vasos' && estabaHecha) {
         setAviso('Lo quité. No pasa nada, puedo marcarlo cuando quiera.');
@@ -176,7 +184,8 @@ export function ListaMisiones({
               </span>
 
               {esVasos ? (
-                <span className="flex flex-none items-center gap-2">
+                <span className="relative flex flex-none items-center gap-2">
+                  <MiniConfeti activo={celebrando === m.id} />
                   {m.avance > 0 && (
                     <button
                       type="button"
@@ -211,7 +220,8 @@ export function ListaMisiones({
                   </button>
                 </span>
               ) : (
-                <span className="flex h-11 w-11 flex-none items-center justify-center">
+                <span className="relative flex h-11 w-11 flex-none items-center justify-center">
+                  <MiniConfeti activo={celebrando === m.id} />
                   <motion.span
                     animate={{ scale: m.completado ? [1, 1.18, 1] : 1 }}
                     transition={{ duration: 0.34, ease: [0.34, 1.56, 0.64, 1] }}

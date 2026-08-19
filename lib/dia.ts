@@ -26,10 +26,14 @@ export type ResumenDia = {
   ultimoMomento: string | null;
 };
 
-/** Fecha local en YYYY-MM-DD (no UTC: a las 7pm ya sería "mañana"). */
+/** La app corre para Colombia: todas las fechas y horas se anclan a esta zona,
+ *  sin importar en qué huso esté el servidor (Vercel corre en UTC). */
+const ZONA_HORARIA = 'America/Bogota';
+
+/** Fecha en Colombia, en YYYY-MM-DD (no en la zona del servidor: a las 7pm en
+ *  Bogotá el servidor en UTC ya cree que es "mañana"). */
 export function hoyLocal(d = new Date()): string {
-  const off = d.getTimezoneOffset() * 60000;
-  return new Date(d.getTime() - off).toISOString().slice(0, 10);
+  return d.toLocaleDateString('en-CA', { timeZone: ZONA_HORARIA });
 }
 
 /** 1 = lunes … 7 = domingo */
@@ -404,7 +408,12 @@ export async function alternarMision(usuariaId: number, habitoId: number, fecha:
   }
 
   const hora = completado
-    ? new Date().toLocaleTimeString('es', { hour: '2-digit', minute: '2-digit', hour12: false })
+    ? new Date().toLocaleTimeString('es-CO', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: ZONA_HORARIA,
+      })
     : null;
 
   const { error } = await db()
