@@ -291,8 +291,9 @@ export async function resumenSemana(usuariaId: number, fechaRef: string): Promis
 
 /**
  * Mapa de constancia: 12 semanas de un vistazo. El color de cada día refleja lo que
- * REALMENTE le faltó ESE día (no un conteo acumulado): día completo pinta fuerte,
- * cuantas más misiones queden pendientes, más flojo el color.
+ * REALMENTE cumplió ESE día (no un conteo acumulado), en 4 niveles bien distintos:
+ * no hizo nada = blanco · hizo la mitad o menos = se nota, pero flojo · más de la
+ * mitad = intermedio · día completo = el color más fuerte.
  */
 export async function mapaConstancia(usuariaId: number, semanas = 12) {
   const hoy = hoyLocal();
@@ -320,12 +321,11 @@ export async function mapaConstancia(usuariaId: number, semanas = 12) {
     return listaDias.filter((dias) => dias.includes(diaSem)).length;
   }
 
-  function nivelDe(faltantes: number, total: number): 0 | 1 | 2 | 3 {
-    if (total === 0) return 0;
-    if (faltantes <= 0) return 3;
-    if (faltantes === 1) return 2;
-    if (faltantes === 2) return 1;
-    return 0;
+  /** Blanco si no hizo nada — nunca se confunde con "hizo la mitad o menos", que ya se nota. */
+  function nivelDe(completadas: number, total: number): 0 | 1 | 2 | 3 {
+    if (total === 0 || completadas === 0) return 0;
+    if (completadas >= total) return 3;
+    return completadas / total <= 0.5 ? 1 : 2;
   }
 
   const columnas: Array<Array<{ fecha: string; nivel: 0 | 1 | 2 | 3; futuro: boolean }>> = [];
@@ -335,10 +335,9 @@ export async function mapaConstancia(usuariaId: number, semanas = 12) {
       const fecha = correrDias(desde, s * 7 + d);
       const total = totalDe(String(diaSemana(fecha)));
       const completadas = completadasPorFecha.get(fecha) ?? 0;
-      const faltantes = Math.max(0, total - completadas);
       col.push({
         fecha,
-        nivel: nivelDe(faltantes, total),
+        nivel: nivelDe(completadas, total),
         futuro: fecha > hoy,
       });
     }
