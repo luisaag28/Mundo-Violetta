@@ -6,16 +6,18 @@ import { Eye, EyeOff } from 'lucide-react';
 type Props = {
   nombre: string;
   etiqueta: string;
-  tipo?: 'text' | 'password';
+  tipo?: 'text' | 'password' | 'number' | 'date';
   placeholder?: string;
   autoComplete?: string;
   icono: React.ReactNode;
   defaultValue?: string;
   maxLength?: number;
+  min?: number | string;
+  max?: number | string;
 };
 
 export function CampoTexto({
-  nombre, etiqueta, tipo = 'text', placeholder, autoComplete, icono, defaultValue, maxLength,
+  nombre, etiqueta, tipo = 'text', placeholder, autoComplete, icono, defaultValue, maxLength, min, max,
 }: Props) {
   const id = useId();
   const [visible, setVisible] = useState(false);
@@ -44,6 +46,9 @@ export function CampoTexto({
           autoComplete={autoComplete}
           defaultValue={defaultValue}
           maxLength={maxLength}
+          min={min}
+          max={max}
+          inputMode={tipo === 'number' ? 'numeric' : undefined}
           className="h-14 w-full rounded-[var(--radius-pill)] border-2 border-lav-100 bg-hundido
                      pl-12 pr-12 text-[16px] font-bold text-tinta
                      placeholder:font-semibold placeholder:text-tinta-3

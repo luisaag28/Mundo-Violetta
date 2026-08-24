@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Sparkles, TrendingUp, User } from 'lucide-react';
+import { Home, Sparkles, TrendingUp, BookOpen, User } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const DESTINOS = [
   { href: '/mi-dia', etiqueta: 'Mi día', Icono: Home },
   { href: '/mi-mundo', etiqueta: 'Mi mundo', Icono: Sparkles },
   { href: '/mi-semana', etiqueta: 'Mi semana', Icono: TrendingUp },
+  { href: '/mis-libros', etiqueta: 'Libros', Icono: BookOpen },
   { href: '/yo', etiqueta: 'Yo', Icono: User },
 ];
 
@@ -28,7 +29,7 @@ export function NavInferior() {
               <Link
                 href={href}
                 aria-current={activo ? 'page' : undefined}
-                className="flex min-w-[70px] flex-col items-center gap-1 rounded-[var(--radius-inner)]
+                className="flex min-w-[56px] flex-col items-center gap-1 rounded-[var(--radius-inner)]
                            py-1 transition-transform duration-150 active:scale-95"
               >
                 <span className="relative flex h-8 w-13 items-center justify-center rounded-2xl px-4">

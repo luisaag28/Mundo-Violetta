@@ -90,15 +90,22 @@ export async function misionesDe(usuariaId: number, fecha: string): Promise<Misi
     (registros ?? []).map((r) => [r.habito_id as number, r])
   );
 
+  // Miércoles, viernes y sábado el baile es clase o práctica externa: no lleva duración fija.
+  const SIN_DURACION_BAILE = ['3', '5', '6'];
+
   return habitos
     .filter((h) => String(h.dias).split(',').includes(dia))
     .map((h) => {
       const r = porHabito.get(h.id as number);
+      const detalle =
+        h.clave === 'baile' && SIN_DURACION_BAILE.includes(dia)
+          ? null
+          : (h.detalle as string | null);
       return {
         id: h.id as number,
         clave: h.clave as string,
         titulo: h.titulo as string,
-        detalle: h.detalle as string | null,
+        detalle,
         ilustracion: h.ilustracion as string,
         tipo: h.tipo as 'simple' | 'vasos',
         meta: h.meta as number,
@@ -282,23 +289,43 @@ export async function resumenSemana(usuariaId: number, fechaRef: string): Promis
   };
 }
 
-/** Mapa de constancia: 12 semanas de un vistazo. */
+/**
+ * Mapa de constancia: 12 semanas de un vistazo. El color de cada día refleja lo que
+ * REALMENTE le faltó ESE día (no un conteo acumulado): día completo pinta fuerte,
+ * cuantas más misiones queden pendientes, más flojo el color.
+ */
 export async function mapaConstancia(usuariaId: number, semanas = 12) {
   const hoy = hoyLocal();
   const desde = correrDias(lunesDe(hoy), -(semanas - 1) * 7);
 
-  const { data } = await db()
-    .from('registros')
-    .select('fecha')
-    .eq('usuaria_id', usuariaId)
-    .eq('completado', true)
-    .gte('fecha', desde)
-    .lte('fecha', hoy);
+  const [{ data: habitos }, { data: registros }] = await Promise.all([
+    db().from('habitos').select('dias').eq('usuaria_id', usuariaId),
+    db()
+      .from('registros')
+      .select('fecha')
+      .eq('usuaria_id', usuariaId)
+      .eq('completado', true)
+      .gte('fecha', desde)
+      .lte('fecha', hoy),
+  ]);
 
-  const conteo = new Map<string, number>();
-  for (const r of data ?? []) {
+  const completadasPorFecha = new Map<string, number>();
+  for (const r of registros ?? []) {
     const f = r.fecha as string;
-    conteo.set(f, (conteo.get(f) ?? 0) + 1);
+    completadasPorFecha.set(f, (completadasPorFecha.get(f) ?? 0) + 1);
+  }
+
+  const listaDias = (habitos ?? []).map((h) => String(h.dias).split(','));
+  function totalDe(diaSem: string): number {
+    return listaDias.filter((dias) => dias.includes(diaSem)).length;
+  }
+
+  function nivelDe(faltantes: number, total: number): 0 | 1 | 2 | 3 {
+    if (total === 0) return 0;
+    if (faltantes <= 0) return 3;
+    if (faltantes === 1) return 2;
+    if (faltantes === 2) return 1;
+    return 0;
   }
 
   const columnas: Array<Array<{ fecha: string; nivel: 0 | 1 | 2 | 3; futuro: boolean }>> = [];
@@ -306,10 +333,12 @@ export async function mapaConstancia(usuariaId: number, semanas = 12) {
     const col = [];
     for (let d = 0; d < 7; d++) {
       const fecha = correrDias(desde, s * 7 + d);
-      const n = conteo.get(fecha) ?? 0;
+      const total = totalDe(String(diaSemana(fecha)));
+      const completadas = completadasPorFecha.get(fecha) ?? 0;
+      const faltantes = Math.max(0, total - completadas);
       col.push({
         fecha,
-        nivel: (n === 0 ? 0 : n <= 2 ? 1 : n <= 5 ? 2 : 3) as 0 | 1 | 2 | 3,
+        nivel: nivelDe(faltantes, total),
         futuro: fecha > hoy,
       });
     }

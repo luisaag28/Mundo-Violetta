@@ -2,9 +2,10 @@ import Image from 'next/image';
 import { ilustracion } from '@/lib/assets';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
-import { Star, Flame, Lock, ChevronRight, Sparkles, ChevronLeft } from 'lucide-react';
+import { Star, Flame, Lock, ChevronRight, Sparkles, ChevronLeft, Heart } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
 import { resumenDia, nivelDe, hoyLocal, correrDias, etiquetaFecha } from '@/lib/dia';
+import { fraseDelDia } from '@/lib/frasesDeValor';
 import { ListaMisiones } from '@/components/ListaMisiones';
 import { NavInferior } from '@/components/NavInferior';
 import { NumeroQueCuenta } from '@/components/NumeroQueCuenta';
@@ -39,6 +40,7 @@ export default async function MiDia({
   const porcentaje = dia.total > 0 ? Math.round((dia.hechas / dia.total) * 100) : 0;
   const tira = dia.momentos.slice(0, 3);
   const resto = Math.max(0, dia.momentos.length - tira.length);
+  const frase = fraseDelDia(fecha);
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
@@ -196,6 +198,17 @@ export default async function MiDia({
             </div>
           </Link>
         )}
+
+        {/* ── Frase de valor del día ── */}
+        <section className="mb-4 flex items-start gap-3 rounded-[var(--radius-card)] bg-superficie p-4 shadow-n1">
+          <span className="flex h-9 w-9 flex-none items-center justify-center rounded-full bg-lav-100 text-lav-700">
+            <Heart size={17} strokeWidth={2.3} fill="#9B6FD4" />
+          </span>
+          <div className="min-w-0">
+            <p className="t-label-alto uppercase text-lav-700">{frase.valor}</p>
+            <p className="t-cuerpo-fuerte mt-1 text-tinta">{frase.texto}</p>
+          </div>
+        </section>
 
         {/* ── Misiones: panel hundido — el 3er nivel de profundidad de la ficha ── */}
         <section className="rounded-[var(--radius-card)] bg-lav-50 p-2">
