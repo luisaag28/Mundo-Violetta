@@ -9,7 +9,13 @@ import { accionActualizarAvance, accionTerminarLibro, accionBorrarLibro } from '
 import { MiniConfeti } from './MiniConfeti';
 import { reproducirLogro } from '@/lib/sonido';
 
-export function ActualizarLectura({ libro }: { libro: Libro }) {
+export function ActualizarLectura({
+  libro,
+  fechaFinTexto,
+}: {
+  libro: Libro;
+  fechaFinTexto?: string | null;
+}) {
   const router = useRouter();
   const [, empezar] = useTransition();
   const [pagina, setPagina] = useState(String(libro.paginaActual));
@@ -71,8 +77,8 @@ export function ActualizarLectura({ libro }: { libro: Libro }) {
           <Check size={24} strokeWidth={3} />
         </span>
         <p className="t-cuerpo-fuerte text-menta-700">¡Terminé este libro!</p>
-        {libro.fechaFin && (
-          <p className="t-label mt-1 text-menta-700/85">Lo terminé el {libro.fechaFin}</p>
+        {fechaFinTexto && (
+          <p className="t-label mt-1 text-menta-700/85">Lo terminé el {fechaFinTexto}</p>
         )}
         <button
           type="button"

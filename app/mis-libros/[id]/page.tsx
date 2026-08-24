@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { redirect, notFound } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
+import { fechaLarga } from '@/lib/dia';
 import { libroDe } from '@/lib/libros';
 import { NavInferior } from '@/components/NavInferior';
 import { ActualizarLectura } from '@/components/ActualizarLectura';
@@ -64,7 +65,10 @@ export default async function DetalleLibro({
           </div>
         </section>
 
-        <ActualizarLectura libro={libro} />
+        <ActualizarLectura
+          libro={libro}
+          fechaFinTexto={libro.fechaFin ? fechaLarga(libro.fechaFin) : null}
+        />
       </main>
 
       <NavInferior />
