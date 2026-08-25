@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { redirect, notFound } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, TrendingUp } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
 import { fechaLarga } from '@/lib/dia';
-import { libroDe } from '@/lib/libros';
+import { libroDe, promedioDiario } from '@/lib/libros';
 import { NavInferior } from '@/components/NavInferior';
 import { ActualizarLectura } from '@/components/ActualizarLectura';
 
@@ -21,6 +21,8 @@ export default async function DetalleLibro({
 
   const libro = await libroDe(usuaria.id, libroId);
   if (!libro) notFound();
+
+  const promedio = await promedioDiario(usuaria.id, libroId);
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
@@ -64,6 +66,23 @@ export default async function DetalleLibro({
             <p className="t-label mt-2 text-durazno-700/85">páginas</p>
           </div>
         </section>
+
+        {promedio !== null && (
+          <section className="mb-4 flex items-center gap-3 rounded-[var(--radius-card)] bg-lav-50 p-4">
+            <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-lav-100 text-lav-700">
+              <TrendingUp size={20} strokeWidth={2.3} />
+            </span>
+            <div className="min-w-0">
+              <p className="t-cuerpo-fuerte text-tinta">
+                Leo un promedio de <span className="t-seccion text-lav-700">{promedio}</span>{' '}
+                {promedio === 1 ? 'página' : 'páginas'} por día
+              </p>
+              <p className="t-label mt-0.5 text-tinta-2">
+                Contando solo los días en que de verdad leí, no todos los días que pasaron.
+              </p>
+            </div>
+          </section>
+        )}
 
         <ActualizarLectura
           libro={libro}

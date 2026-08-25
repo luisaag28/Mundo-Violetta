@@ -114,17 +114,57 @@ export async function crearLibro(
   return data.id as number;
 }
 
-/** Actualiza la página donde va. Si llega (o pasa) el total, el libro se marca terminado solo. */
+/**
+ * Suma páginas al registro del día (una fila por libro y fecha, igual que los hábitos).
+ * Si ya leyó algo hoy de este libro, se ACUMULA — no pisa lo que ya había.
+ */
+async function registrarSesion(usuariaId: number, libroId: number, fecha: string, paginasNuevas: number) {
+  if (paginasNuevas <= 0) return;
+
+  const { data: existente } = await db()
+    .from('sesiones_lectura')
+    .select('paginas_leidas')
+    .eq('usuaria_id', usuariaId)
+    .eq('libro_id', libroId)
+    .eq('fecha', fecha)
+    .maybeSingle();
+
+  const total = (existente?.paginas_leidas as number | undefined ?? 0) + paginasNuevas;
+
+  await db()
+    .from('sesiones_lectura')
+    .upsert(
+      { usuaria_id: usuariaId, libro_id: libroId, fecha, paginas_leidas: total },
+      { onConflict: 'libro_id,fecha' }
+    );
+}
+
+/** Promedio real: páginas leídas ÷ días en los que de verdad leyó — no días de calendario. */
+export async function promedioDiario(usuariaId: number, libroId: number): Promise<number | null> {
+  const { data } = await db()
+    .from('sesiones_lectura')
+    .select('paginas_leidas')
+    .eq('usuaria_id', usuariaId)
+    .eq('libro_id', libroId);
+
+  if (!data || data.length === 0) return null;
+
+  const total = data.reduce((s, r) => s + (r.paginas_leidas as number), 0);
+  return Math.round(total / data.length);
+}
+
+/** Actualiza la página donde va y registra la sesión de hoy. Si llega (o pasa) el total, el libro se marca terminado solo. */
 export async function actualizarAvance(usuariaId: number, libroId: number, paginaActual: number) {
   const { data: libro } = await db()
     .from('libros')
-    .select('paginas_totales')
+    .select('pagina_actual, paginas_totales')
     .eq('usuaria_id', usuariaId)
     .eq('id', libroId)
     .maybeSingle();
 
   if (!libro) return false;
 
+  const anterior = libro.pagina_actual as number;
   const paginasTotales = libro.paginas_totales as number;
   const nuevaPagina = Math.max(0, Math.min(paginaActual, paginasTotales));
   const terminado = nuevaPagina >= paginasTotales;
@@ -139,30 +179,45 @@ export async function actualizarAvance(usuariaId: number, libroId: number, pagin
     .eq('usuaria_id', usuariaId)
     .eq('id', libroId);
 
-  return !error;
+  if (error) return false;
+
+  if (nuevaPagina > anterior) {
+    await registrarSesion(usuariaId, libroId, hoyLocal(), nuevaPagina - anterior);
+  }
+
+  return true;
 }
 
 export async function marcarTerminado(usuariaId: number, libroId: number) {
   const { data: libro } = await db()
     .from('libros')
-    .select('paginas_totales')
+    .select('pagina_actual, paginas_totales')
     .eq('usuaria_id', usuariaId)
     .eq('id', libroId)
     .maybeSingle();
 
   if (!libro) return false;
 
+  const anterior = libro.pagina_actual as number;
+  const paginasTotales = libro.paginas_totales as number;
+
   const { error } = await db()
     .from('libros')
     .update({
-      pagina_actual: libro.paginas_totales,
+      pagina_actual: paginasTotales,
       terminado: true,
       fecha_fin: hoyLocal(),
     })
     .eq('usuaria_id', usuariaId)
     .eq('id', libroId);
 
-  return !error;
+  if (error) return false;
+
+  if (paginasTotales > anterior) {
+    await registrarSesion(usuariaId, libroId, hoyLocal(), paginasTotales - anterior);
+  }
+
+  return true;
 }
 
 export async function borrarLibro(usuariaId: number, libroId: number) {
