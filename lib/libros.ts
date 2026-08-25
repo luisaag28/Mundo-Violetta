@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from './db';
-import { hoyLocal } from './dia';
+import { hoyLocal, MESES } from './dia';
 
 export type Libro = {
   id: number;
@@ -218,6 +218,85 @@ export async function marcarTerminado(usuariaId: number, libroId: number) {
   }
 
   return true;
+}
+
+export type DiaLectura = { fecha: string; dia: number; paginas: number; futuro: boolean };
+export type MesLectura = {
+  mes: string;
+  etiqueta: string;
+  dias: DiaLectura[];
+  /** 1 = lunes … 7 = domingo — para saber cuántas celdas vacías van antes del día 1. */
+  primerDiaSemana: number;
+  haySiguiente: boolean;
+};
+
+function diaSemanaDe(fecha: string): number {
+  const d = new Date(fecha + 'T12:00:00');
+  return d.getDay() === 0 ? 7 : d.getDay();
+}
+
+/** Mes actual en formato YYYY-MM, según la fecha de Colombia. */
+export function mesActual(): string {
+  return hoyLocal().slice(0, 7);
+}
+
+export function mesAnterior(mes: string): string {
+  const [anio, mesNum] = mes.split('-').map(Number);
+  const d = new Date(anio, mesNum - 2, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+export function mesSiguiente(mes: string): string {
+  const [anio, mesNum] = mes.split('-').map(Number);
+  const d = new Date(anio, mesNum, 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+}
+
+/** Todos los días del mes con las páginas leídas ese día (0 si no leyó nada). */
+export async function calendarioLectura(
+  usuariaId: number,
+  libroId: number,
+  mes: string
+): Promise<MesLectura> {
+  const [anio, mesNum] = mes.split('-').map(Number);
+  const diasEnMes = new Date(anio, mesNum, 0).getDate();
+  const primerDia = `${mes}-01`;
+  const ultimoDia = `${mes}-${String(diasEnMes).padStart(2, '0')}`;
+
+  const { data } = await db()
+    .from('sesiones_lectura')
+    .select('fecha, paginas_leidas')
+    .eq('usuaria_id', usuariaId)
+    .eq('libro_id', libroId)
+    .gte('fecha', primerDia)
+    .lte('fecha', ultimoDia);
+
+  const porFecha = new Map<string, number>();
+  for (const r of data ?? []) {
+    porFecha.set(r.fecha as string, r.paginas_leidas as number);
+  }
+
+  const hoy = hoyLocal();
+  const dias: DiaLectura[] = [];
+  for (let d = 1; d <= diasEnMes; d++) {
+    const fecha = `${mes}-${String(d).padStart(2, '0')}`;
+    dias.push({
+      fecha,
+      dia: d,
+      paginas: porFecha.get(fecha) ?? 0,
+      futuro: fecha > hoy,
+    });
+  }
+
+  const nombreMes = MESES[mesNum - 1];
+
+  return {
+    mes,
+    etiqueta: `${nombreMes.charAt(0).toUpperCase()}${nombreMes.slice(1)} ${anio}`,
+    dias,
+    primerDiaSemana: diaSemanaDe(primerDia),
+    haySiguiente: mes < mesActual(),
+  };
 }
 
 export async function borrarLibro(usuariaId: number, libroId: number) {

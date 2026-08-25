@@ -43,7 +43,7 @@ function diaSemana(fecha: string): number {
 }
 
 const DIAS = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'];
-const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+export const MESES = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
   'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
 
 export function etiquetaFecha(fecha: string): string {

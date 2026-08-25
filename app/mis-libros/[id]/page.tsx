@@ -3,14 +3,17 @@ import { redirect, notFound } from 'next/navigation';
 import { ArrowLeft, TrendingUp } from 'lucide-react';
 import { usuariaActual } from '@/lib/auth';
 import { fechaLarga } from '@/lib/dia';
-import { libroDe, promedioDiario } from '@/lib/libros';
+import { libroDe, promedioDiario, calendarioLectura, mesActual } from '@/lib/libros';
 import { NavInferior } from '@/components/NavInferior';
 import { ActualizarLectura } from '@/components/ActualizarLectura';
+import { MapaLectura } from '@/components/MapaLectura';
 
 export default async function DetalleLibro({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ mes?: string }>;
 }) {
   const usuaria = await usuariaActual();
   if (!usuaria) redirect('/entrar');
@@ -22,7 +25,13 @@ export default async function DetalleLibro({
   const libro = await libroDe(usuaria.id, libroId);
   if (!libro) notFound();
 
-  const promedio = await promedioDiario(usuaria.id, libroId);
+  const { mes: mesPedido } = await searchParams;
+  const mes = mesPedido && /^\d{4}-\d{2}$/.test(mesPedido) && mesPedido <= mesActual() ? mesPedido : mesActual();
+
+  const [promedio, calendario] = await Promise.all([
+    promedioDiario(usuaria.id, libroId),
+    calendarioLectura(usuaria.id, libroId, mes),
+  ]);
 
   return (
     <div className="flex h-dvh flex-col overflow-hidden">
@@ -68,13 +77,13 @@ export default async function DetalleLibro({
         </section>
 
         {promedio !== null && (
-          <section className="mb-4 flex items-center gap-3 rounded-[var(--radius-card)] bg-lav-50 p-4">
-            <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-lav-100 text-lav-700">
+          <section className="mb-4 flex items-center gap-3 rounded-[var(--radius-card)] bg-menta-100 p-4">
+            <span className="flex h-11 w-11 flex-none items-center justify-center rounded-full bg-menta text-white">
               <TrendingUp size={20} strokeWidth={2.3} />
             </span>
             <div className="min-w-0">
               <p className="t-cuerpo-fuerte text-tinta">
-                Leo un promedio de <span className="t-seccion text-lav-700">{promedio}</span>{' '}
+                Leo un promedio de <span className="t-seccion text-menta-700">{promedio}</span>{' '}
                 {promedio === 1 ? 'página' : 'páginas'} por día
               </p>
               <p className="t-label mt-0.5 text-tinta-2">
@@ -83,6 +92,10 @@ export default async function DetalleLibro({
             </div>
           </section>
         )}
+
+        <div className="mb-4">
+          <MapaLectura libroId={libro.id} calendario={calendario} />
+        </div>
 
         <ActualizarLectura
           libro={libro}
