@@ -67,7 +67,7 @@ export function MapaLectura({ libroId, calendario }: { libroId: number; calendar
           return (
             <div
               key={d.fecha}
-              title={`${d.fecha}: ${d.paginas} páginas`}
+              title={d.futuro ? undefined : `${d.fecha}: ${d.paginas} páginas`}
               className={`relative flex aspect-square flex-col items-center justify-center rounded-[var(--radius-chip)] ${
                 d.futuro ? 'border border-menta/10 bg-transparent text-tinta-3/50' : CLASE_NIVEL[nivel]
               }`}
